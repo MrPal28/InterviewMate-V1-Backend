@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${resumeData.personalInfo.fullName + ' - Resume'}">Resume</title>
+    <meta name="description" th:content="'Professional resume of ' + ${resumeData.personalInfo.fullName}" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&amp;family=Lora:wght@400;500&amp;display=swap" rel="stylesheet" />
+
+    <style type="text/css">
+        /* PAGE SETUP */
+        @page { size: A4; margin: 0.75in; }
+
+        /* GLOBAL RESET */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Open Sans', Arial, sans-serif; font-size: 10pt; line-height: 1.4; color: #333; background-color: #fff; }
+
+        /* SECTION CONTROL */
+        .section { page-break-inside: avoid; page-break-after: auto; margin-bottom: 16pt; }
+        .experience-item, .education-item, .project-item { page-break-inside: avoid; margin-bottom: 12pt; }
+
+        /* HEADER */
+        .resume-header { text-align: center; border-bottom: 2pt solid #2c3e50; padding-bottom: 12pt; margin-bottom: 20pt; page-break-after: avoid; }
+        .resume-title { font-family: 'Lora', serif; font-size: 24pt; font-weight: 700; color: #2c3e50; margin-bottom: 8pt; letter-spacing: 0.5pt; }
+        .contact-info { font-size: 9pt; color: #555; }
+        .contact-info span { display: inline-block; margin: 0 8pt; }
+        .contact-info span:first-child { margin-left: 0; }
+        .contact-info span:last-child { margin-right: 0; }
+
+        /* SECTION TITLES */
+        .section-title { font-size: 12pt; font-weight: 700; color: #2c3e50; text-transform: uppercase; letter-spacing: 1pt; border-bottom: 1pt solid #bdc3c7; padding-bottom: 4pt; margin-bottom: 10pt; }
+
+        /* ITEM LAYOUT */
+        .item-container { width: 100%; display: table; margin-bottom: 12pt; }
+        .item-left { display: table-cell; width: 70%; vertical-align: top; padding-right: 15pt; }
+        .item-right { display: table-cell; width: 30%; vertical-align: top; text-align: right; }
+        .item-title { font-size: 11pt; font-weight: 600; color: #2c3e50; margin-bottom: 2pt; }
+        .item-subtitle { font-size: 10pt; font-weight: 400; color: #34495e; margin-bottom: 4pt; }
+        .item-date { font-size: 9pt; color: #7f8c8d; font-weight: 500; white-space: nowrap; }
+        .item-description, .summary-text, .project-description { font-size: 10pt; color: #555; line-height: 1.5; text-align: justify; margin-top: 6pt; }
+
+        /* SKILLS */
+        .skills-container { width: 100%; }
+        .skills-category { margin-bottom: 6pt; overflow: hidden; }
+        .skills-label { font-weight: 600; color: #2c3e50; float: left; width: 120pt; font-size: 10pt; }
+        .skills-list { margin-left: 120pt; color: #555; font-size: 10pt; }
+
+        /* EDUCATION */
+        .gpa-info { font-size: 9pt; color: #7f8c8d; margin-top: 2pt; }
+
+        /* PROJECT */
+        .project-tech { font-size: 9pt; color: #7f8c8d; }
+        .project-link { font-size: 9pt; color: #3498db; text-decoration: none; }
+
+        /* PRINT */
+        @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+    </style>
+</head>
+<body>
+<div class="resume-container">
+    <!-- HEADER -->
+    <header class="resume-header">
+        <h1 class="resume-title" th:text="${resumeData.personalInfo.fullName ?: 'Your Name'}">Your Name</h1>
+        <div class="contact-info">
+            <span th:if="${resumeData.personalInfo.email}" th:text="${resumeData.personalInfo.email}">email@example.com</span>
+            <span th:if="${resumeData.personalInfo.phone}" th:text="${resumeData.personalInfo.phone}">+1-234-567-8900</span>
+            <span th:if="${resumeData.personalInfo.location}" th:text="${resumeData.personalInfo.location}">City, State</span>
+            <span th:if="${resumeData.personalInfo.linkedIn}" th:text="${resumeData.personalInfo.linkedIn}">LinkedIn Profile</span>
+            <span th:if="${resumeData.personalInfo.portfolio}" th:text="${resumeData.personalInfo.portfolio}">Portfolio URL</span>
+        </div>
+    </header>
+
+    <!-- SUMMARY -->
+    <section class="section" th:if="${resumeData.summary}">
+        <h2 class="section-title">Professional Summary</h2>
+        <p class="summary-text" th:text="${resumeData.summary}">Professional summary content here...</p>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" th:if="${resumeData.experience != null and !#lists.isEmpty(resumeData.experience)}">
+        <h2 class="section-title">Professional Experience</h2>
+        <div class="experience-item" th:each="exp : ${resumeData.experience}">
+            <div class="item-container">
+                <div class="item-left">
+                    <div class="item-title" th:text="${exp.position}">Position Title</div>
+                    <div class="item-subtitle" th:text="${exp.company}">Company Name</div>
+                </div>
+                <div class="item-right">
+                    <div class="item-date">
+                        <span th:text="${exp.startDate}">Start Date</span> -
+                        <span th:text="${exp.current ? 'Present' : exp.endDate}">End Date</span>
+                    </div>
+                </div>
+            </div>
+            <div class="item-description" th:if="${exp.description}" th:text="${exp.description}">Job description and achievements...</div>
+        </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="section" th:if="${resumeData.education != null and !#lists.isEmpty(resumeData.education)}">
+        <h2 class="section-title">Education</h2>
+        <div class="education-item" th:each="edu : ${resumeData.education}">
+            <div class="item-container">
+                <div class="item-left">
+                    <div class="item-title">
+                        <span th:text="${edu.degree}">Degree</span> in <span th:text="${edu.field}">Field</span>
+                    </div>
+                    <div class="item-subtitle" th:text="${edu.institution}">Institution Name</div>
+                    <div class="gpa-info" th:if="${edu.gpa}">
+                        GPA: <span th:text="${edu.gpa}">3.8</span>
+                    </div>
+                </div>
+                <div class="item-right">
+                    <div class="item-date">
+                        <span th:text="${edu.startDate}">Start</span> - 
+                        <span th:text="${edu.endDate}">End</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" th:if="${resumeData.skills != null and !#lists.isEmpty(resumeData.skills)}">
+        <h2 class="section-title">Core Competencies</h2>
+        <div class="skills-container">
+            <div class="skills-category" th:each="skillCategory : ${resumeData.skills}">
+                <div class="skills-label" th:text="${skillCategory.category + ':'}">Category:</div>
+                <div class="skills-list" th:text="${#strings.listJoin(skillCategory.items, ', ')}">Skill1, Skill2</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" th:if="${resumeData.projects != null and !#lists.isEmpty(resumeData.projects)}">
+        <h2 class="section-title">Projects</h2>
+        <div class="project-item" th:each="project : ${resumeData.projects}">
+            <div class="item-container">
+                <div class="item-left">
+                    <div class="item-title" th:text="${project.name}">Project Name</div>
+                </div>
+                <div class="item-right">
+                    <a href="#" th:if="${project.link}" th:href="${project.link}" th:text="${project.link}" class="project-link">Project Link</a>
+                </div>
+            </div>
+            <div class="project-description" th:text="${project.description}">Project description...</div>
+            <div class="project-tech" th:if="${project.technologies != null and !#lists.isEmpty(project.technologies)}">
+                <strong>Technologies:</strong> 
+                <span th:text="${#strings.listJoin(project.technologies, ', ')}">Tech1, Tech2</span>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

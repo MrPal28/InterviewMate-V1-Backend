@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to InterviewMate</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1f2937;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      padding: 40px 20px;
+      text-align: center;
+      color: white;
+    }
+    .header h1 {
+      margin: 10px 0;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .header p {
+      margin: 0;
+      font-size: 14px;
+      color: #dbeafe;
+    }
+    .content {
+      padding: 30px;
+    }
+    .content h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+    .content p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+    .feature {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: #dcfce7;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 24px;
+      margin-right: 10px;
+      font-size: 14px;
+      color: #16a34a;
+    }
+    .cta {
+      text-align: center;
+      margin: 25px 0;
+    }
+    .cta a {
+      display: inline-block;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    .cta a:hover {
+      background: linear-gradient(90deg, #1d4ed8, #6d28d9);
+    }
+    .footer {
+      background: #f9fafb;
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      padding: 20px;
+    }
+    .footer a {
+      color: #374151;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div style="display:inline-flex; justify-content:center; align-items:center; width:60px; height:60px; background-color: rgba(255,255,255,0.2); border-radius:50%; margin-bottom:15px;">
+        <span style="font-size:28px;"></span>
+      </div>
+      <h1>Welcome to InterviewMate!</h1>
+      <p>Your AI-powered interview preparation journey starts now</p>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <h2>Hi <span  style="color:#2563eb;">there</span>! 👋</h2>
+      <p>Thank you for joining InterviewMate! We're excited to help you ace your next interview with our AI-powered preparation tools.</p>
+
+      <!-- Features -->
+      <div class="feature">
+        <div class="feature-icon">✔</div>
+        <div>
+          <h3 style="margin:0; font-size:15px; color:#111827;">AI Mock Interviews</h3>
+          <p style="margin:2px 0 0; font-size:13px;">Practice with our intelligent AI interviewer</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✔</div>
+        <div>
+          <h3 style="margin:0; font-size:15px; color:#111827;">Personalized Feedback</h3>
+          <p style="margin:2px 0 0; font-size:13px;">Get detailed insights to improve your performance</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✔</div>
+        <div>
+          <h3 style="margin:0; font-size:15px; color:#111827;">Industry-Specific Questions</h3>
+          <p style="margin:2px 0 0; font-size:13px;">Tailored questions for your target role</p>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="cta">
+        <a th:href="${dashboardUrl}">Start Your First Practice Session</a>
+      </div>
+
+      <!-- Support -->
+      <p style="text-align:center; font-size:13px; color:#6b7280;">
+        Need help getting started? 
+        <a th:href="${supportUrl}">Contact our support team</a>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>© 2025 InterviewMate. All rights reserved.</p>
+      <p>
+        <span th:text="${userEmail}">interviewmate@gmail.com</span> • 
+        <a th:href="${unsubscribeUrl}">Unsubscribe</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

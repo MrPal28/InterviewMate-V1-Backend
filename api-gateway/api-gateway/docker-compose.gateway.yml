@@ -1,0 +1,34 @@
+
+services:
+  api-gateway:
+    image: arindampal28/interviewmate-api-gateway:latest
+    container_name: backend-api-gateway
+    env_file: 
+      - ../../.env
+
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+
+   
+
+    networks:
+      - interviewmate-network
+
+    volumes:
+      - gateway-logs:${LOG_PATH:-/app/logs}
+
+    depends_on:
+      - eureka-server
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+
+networks:
+  interviewmate-network:
+    external: true
+
+volumes:
+  gateway-logs:

@@ -1,0 +1,28 @@
+
+services:
+  eureka-server:
+    image: arindampal28/interviewmate-eureka-server:latest
+    container_name: backend-eureka-server
+    ports:
+      - "8761:8761"
+    env_file: 
+      - ../../.env
+
+    networks:
+      - interviewmate-network
+
+    volumes:
+      - eureka-logs:/app/logs
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8761/actuator/health || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+
+networks:
+  interviewmate-network:
+    external: true
+
+volumes:
+  eureka-logs:

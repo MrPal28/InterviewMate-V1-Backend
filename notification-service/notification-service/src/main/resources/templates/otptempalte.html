@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Your Verification Code - InterviewMate</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        /* Email client resets */
+        body, table, td, p, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table { border-collapse: collapse !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+        
+        /* Prevent auto-linking */
+        .no-link { color: inherit !important; text-decoration: none !important; }
+        
+        /* Responsive styles */
+        @media only screen and (max-width: 640px) {
+            .mobile-padding { padding-left: 16px !important; padding-right: 16px !important; }
+            .mobile-text-base { font-size: 16px !important; line-height: 24px !important; }
+            .mobile-text-sm { font-size: 14px !important; line-height: 20px !important; }
+            .otp-mobile { font-size: 24px !important; padding: 16px 20px !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif; background-color: #f9fafb;">
+    
+    <!-- Preheader text (hidden but shows in email previews) -->
+    <div style="display: none; max-height: 0; overflow: hidden;">
+        <span th:if="${action == 'signup'}">Complete your InterviewMate registration with this verification code.</span>
+        <span th:if="${action == 'login'}">Your secure login verification code for InterviewMate.</span>
+        <span th:unless="${action}">Your InterviewMate verification code expires in [[${expirationMinutes ?: '5'}]] minutes.</span>
+    </div>
+
+    <!-- Main wrapper table -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f9fafb; margin: 0; padding: 0;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                
+                <!-- Container table -->
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); padding: 48px 32px; text-align: center;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center">
+                                        <!-- Logo/Icon -->
+                                        <div style="width: 64px; height: 64px; background-color: rgba(255, 255, 255, 0.2); border-radius: 16px; margin: 0 auto 24px; display: inline-block; text-align: center; line-height: 64px;">
+                                            <span style="font-size: 28px;">🔐</span>
+                                        </div>
+                                        
+                                        <!-- Title -->
+                                        <h1 style="margin: 0 0 8px 0; color: #ffffff; font-size: 28px; font-weight: 700; line-height: 36px;">
+                                            Verification Required
+                                        </h1>
+                                        
+                                        <!-- Subtitle -->
+                                        <p style="margin: 0; color: rgba(255, 255, 255, 0.9); font-size: 16px; line-height: 24px;">
+                                            <span th:if="${action == 'signup'}">Welcome to InterviewMate! Let's verify your email.</span>
+                                            <span th:if="${action == 'login'}">Secure login verification for your account.</span>
+                                            <span th:unless="${action}">Please verify your identity to continue.</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Greeting Section -->
+                    <tr>
+                        <td style="padding: 40px 32px 0;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center">
+                                        <h2 style="margin: 0 0 16px 0; color: #111827; font-size: 24px; font-weight: 600; line-height: 32px;">
+                                            Hello <span th:text="${userName ?: 'there'}" class="no-link">there</span>! 👋
+                                        </h2>
+                                        <p style="margin: 0; color: #6b7280; font-size: 16px; line-height: 24px; text-align: center;" class="mobile-text-base">
+                                            <span th:if="${action == 'signup'}">We're excited to have you join InterviewMate! Please use the verification code below to complete your registration.</span>
+                                            <span th:if="${action == 'login'}">To ensure the security of your account, please verify your identity using the code below.</span>
+                                            <span th:unless="${action}">We need to verify your identity. Please use the verification code provided below.</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- OTP Section -->
+                    <tr>
+                        <td style="padding: 40px 32px;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center">
+                                        <!-- OTP Label -->
+                                        <p style="margin: 0 0 20px 0; color: #374151; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">
+                                            Your Verification Code
+                                        </p>
+                                        
+                                        <!-- OTP Container -->
+                                        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 2px solid #e5e7eb; border-radius: 12px; padding: 24px 32px; margin: 0 auto; display: inline-block; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
+                                            <span style="font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 32px; font-weight: 700; color: #1f2937; letter-spacing: 4px; line-height: 1;" class="otp-mobile no-link" > {{otp}}</span>
+                                        </div>
+                                        
+                                        <!-- Expiration Notice -->
+                                        <p style="margin: 20px 0 0 0; color: #f59e0b; font-size: 14px; line-height: 20px; font-weight: 500;" class="mobile-text-sm">
+                                            ⏰ This code expires in <span th:text="${expirationMinutes ?: '5'}" class="no-link">5</span> minutes
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- CTA Button Section -->
+                    <tr th:if="${verificationUrl}">
+                        <td style="padding: 0 32px 40px;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center">
+                                        <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px; line-height: 20px;" class="mobile-text-sm">
+                                            Or click the button below to verify automatically:
+                                        </p>
+                                        
+                                        <!-- CTA Button -->
+                                        <a href="#" th:href="${verificationUrl}" 
+                                           style="display: inline-block; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; font-size: 16px; line-height: 24px; box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);">
+                                            <span style="color: #ffffff !important;">Continue to InterviewMate →</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Instructions -->
+                    <tr>
+                        <td style="padding: 0 32px 40px;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f0f9ff; border-left: 4px solid #0ea5e9; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 24px;">
+                                        <h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px; font-weight: 600; line-height: 24px;">
+                                            📝 How to verify:
+                                        </h3>
+                                        
+                                        <div style="color: #64748b; font-size: 14px; line-height: 20px;" class="mobile-text-sm">
+                                            <p style="margin: 0 0 8px 0;">1. Copy the 6-digit code above</p>
+                                            <p style="margin: 0 0 8px 0;">2. Return to the InterviewMate verification page</p>
+                                            <p style="margin: 0 0 8px 0;">3. Paste or enter the code</p>
+                                            <p style="margin: 0;">
+                                                <span th:if="${action == 'signup'}">4. Complete your profile setup and start your journey!</span>
+                                                <span th:if="${action == 'login'}">4. Access your secure dashboard</span>
+                                                <span th:unless="${action}">4. Continue with your secure session</span>
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Security Notice -->
+                    <tr>
+                        <td style="padding: 0 32px 40px;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="display: flex; align-items: flex-start;">
+                                            <div style="flex-shrink: 0; margin-right: 12px;">
+                                                <span style="font-size: 20px;">🛡️</span>
+                                            </div>
+                                            <div>
+                                                <h4 style="margin: 0 0 8px 0; color: #92400e; font-size: 14px; font-weight: 600; line-height: 20px;" class="mobile-text-sm">
+                                                    Security Notice
+                                                </h4>
+                                                <div style="color: #92400e; font-size: 13px; line-height: 18px;">
+                                                    <p style="margin: 0 0 4px 0;">• Never share this code with anyone</p>
+                                                    <p style="margin: 0 0 4px 0;">• We'll never ask for your code via email or phone</p>
+                                                    <p style="margin: 0;">• If you didn't request this, please ignore this email</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8fafc; padding: 32px; text-align: center; border-top: 1px solid #e5e7eb;" class="mobile-padding">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td align="center">
+                                        <!-- Company Info -->
+                                        <p style="margin: 0 0 12px 0; color: #374151; font-size: 16px; font-weight: 600; line-height: 24px;" class="mobile-text-base">
+                                            InterviewMate
+                                        </p>
+                                        <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px; line-height: 20px;" class="mobile-text-sm">
+                                            Empowering your career journey with confidence
+                                        </p>
+                                        
+                                        <!-- Contact Info -->
+                                        <p style="margin: 0 0 8px 0; color: #9ca3af; font-size: 13px; line-height: 18px;">
+                                            Need help? Contact us at 
+                                            <a href="#" th:href="'mailto:' + ${supportEmail ?: 'support@interviewmate.com'}" 
+                                               style="color: #3b82f6; text-decoration: none;">
+                                                <span th:text="${supportEmail ?: 'support@interviewmate.com'}" class="no-link">support@interviewmate.com</span>
+                                            </a>
+                                        </p>
+                                        
+                                        <!-- Copyright -->
+                                        <p style="margin: 0; color: #9ca3af; font-size: 12px; line-height: 16px;">
+                                            © <span th:text="${#dates.year(#dates.createNow())}" class="no-link">2025</span> InterviewMate. All rights reserved.
+                                        </p>
+                                        
+                                        <!-- Unsubscribe link if needed -->
+                                        <p th:if="${unsubscribeUrl}" style="margin: 16px 0 0 0; color: #9ca3af; font-size: 12px; line-height: 16px;">
+                                            <a href="#" th:href="${unsubscribeUrl}" style="color: #9ca3af; text-decoration: underline;">
+                                                Unsubscribe from verification emails
+                                            </a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                </table>
+                
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

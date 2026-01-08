@@ -1,0 +1,29 @@
+spring:
+  mail:
+    host: ${SPRING_MAIL_HOST}
+    port: ${SPRING_MAIL_PORT}
+    username: ${EMAIL_USERNAME:arindampal669@gmail.com}
+    password: ${EMAIL_PASSWORD:vguugzkhggifsbqs}
+    properties:
+      mail:
+        smtp:
+          auth: ${SPRING_MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${SPRING_MAIL_SMTP_STARTTLS_ENABLE}
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  kafka:
+    consumer:
+      bootstrap-servers: ${SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS}
+      group-id: ${SPRING_KAFKA_CONSUMER_GROUP_ID}
+      auto-offset-reset: ${SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}

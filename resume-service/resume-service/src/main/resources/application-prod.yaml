@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: ${RESUME_SPRING_DATASOURCE_URL}
+    username: ${RESUME_SPRING_DATASOURCE_USERNAME}
+    password: ${RESUME_SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: ${SPRING_DATA_REDIS_PORT}
+
+  kafka:
+    producer:
+      bootstrap-servers: ${SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+
+python:
+  api:
+    url: ${PYTHON_API_URL}

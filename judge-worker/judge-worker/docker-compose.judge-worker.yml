@@ -1,0 +1,27 @@
+
+services:
+  judge-worker:
+    image: arindampal28/interviewmate-judge-worker:latest
+    container_name: backend-judge-worker
+    env_file:
+      - ../../.env
+    networks:
+      - interviewmate-network
+
+    depends_on:
+      kafka:
+        condition: service_healthy
+      judge0-api:
+        condition: service_started
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8086/actuator/health || exit 1"]
+      interval: 15s
+      retries: 10
+      start_period: 40s
+
+    restart: always
+
+networks:
+  interviewmate-network:
+    external: true

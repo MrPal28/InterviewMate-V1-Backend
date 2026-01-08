@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: eureka-server
+
+server:
+  port: ${EUREKA_SERVER_PORT:8761}
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    "[org.springframework]": INFO
+
+
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 30
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

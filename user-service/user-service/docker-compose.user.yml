@@ -1,0 +1,35 @@
+
+services:
+  user-service:
+    image: arindampal28/interviewmate-user-service:latest
+    container_name: backend-user-service
+    env_file: 
+      - ../../.env
+    networks:
+      - interviewmate-network
+
+    volumes:
+      - user-logs:${LOG_PATH:-/app/logs}
+
+    depends_on:
+      eureka-server:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 40s
+
+networks:
+  interviewmate-network:
+    external: true
+
+volumes:
+  user-logs:

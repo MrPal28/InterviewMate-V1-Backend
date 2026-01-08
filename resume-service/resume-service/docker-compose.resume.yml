@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  resume-service:
+    image: arindampal28/interviewmate-resume-service:latest
+    container_name: backend-resume-service
+    env_file: 
+      - ../../.env
+    networks:
+      - interviewmate-network
+
+    volumes:
+      - resume-logs:${LOG_PATH:-/app/logs}
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8084/actuator/health || exit 1"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+
+networks:
+  interviewmate-network:
+    external: true
+
+volumes:
+  resume-logs:

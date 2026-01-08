@@ -1,0 +1,158 @@
+server:
+  port: ${INTERVIEW_SERVICE_PORT:8085}
+
+spring:
+  application:
+    name: ${SPRING_APPLICATION_INTERVIEW_SERVICE_NAME:interview-service}
+
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: false
+
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: UTC
+    serialization:
+      indent-output: true
+
+  # WebFlux / Netty Tuning
+  webflux:
+    base-path: /api/v1
+
+  codec:
+    max-in-memory-size: 20MB
+
+  # Redis (Reactive)
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      timeout: 5s
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+
+  # Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 5
+      properties:
+        "[linger.ms]": 5
+        "[enable.idempotence]": true
+        "[max.in.flight.requests.per.connection]": 5
+
+    consumer:
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:interview-service-group}
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        "[spring.json.trusted.packages]": "*"
+        "[isolation.level]": read_committed
+
+  # JPA (Only for Reports / History)
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        "[format_sql]": false
+        jdbc:
+          "[time_zone]": UTC
+
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Eureka Client
+  cloud:
+    discovery:
+      enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+
+# External Python AI Service
+python:
+  interview:
+    base-url: ${PYTHON_INTERVIEW_SERVICE_BASE_URL}
+    timeout:
+      connect: 3s
+      read: 15s
+
+# Resilience4j (Critical)
+resilience4j:
+  circuitbreaker:
+    instances:
+      pythonInterviewService:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+
+  retry:
+    instances:
+      pythonInterviewService:
+        maxAttempts: 3
+        waitDuration: 500ms
+
+  timelimiter:
+    instances:
+      pythonInterviewService:
+        timeoutDuration: 15s
+
+# Actuator & Observability
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# Logging (Structured with Correlation ID)
+logging:
+  level:
+    root: INFO
+    "[org.springframework.web.reactive]": INFO
+    "[reactor.netty.http.client]": WARN
+    "[org.apache.kafka]": WARN
+    "[io.github.resilience4j]": INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{correlationId}] %-5level %logger{36} - %msg%n"
+
+# Interview Domain Config
+interview:
+  session:
+    ttl-minutes: 180
+  slot:
+    size: 10
+
+kafka:
+  topics:
+    video-analysis-request: video_analysis_request
+    user-report: UserReport

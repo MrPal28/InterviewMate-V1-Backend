@@ -1,0 +1,6 @@
+#application.yaml
+
+spring:
+  profiles:
+    active:
+      - ${SPRING_PROFILE_ACTIVE:dev}

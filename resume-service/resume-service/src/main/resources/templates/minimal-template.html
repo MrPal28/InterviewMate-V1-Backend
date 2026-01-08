@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${resumeData.personalInfo.fullName + ' - Minimal Resume'}">Minimal Resume</title>
+    <meta name="description" th:content="'Clean minimal resume of ' + ${resumeData.personalInfo.fullName}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        .resume-minimal { font-family: 'Inter', sans-serif; font-weight: 300; }
+    </style>
+</head>
+<body class="bg-gray-50 py-8">
+    <!-- Minimal Resume Template -->
+    <div class="bg-white p-8 shadow-lg max-w-4xl mx-auto resume-minimal print:shadow-none print:max-w-full">
+        
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="text-3xl font-light text-gray-900 mb-2" th:text="${resumeData.personalInfo.fullName ?: 'Your Name'}">Your Name</h1>
+            <div class="text-gray-600 text-sm space-x-4">
+                <span th:if="${resumeData.personalInfo.email}" th:text="${resumeData.personalInfo.email}">email@example.com</span>
+                <span th:if="${resumeData.personalInfo.phone and resumeData.personalInfo.email}">•</span>
+                <span th:if="${resumeData.personalInfo.phone}" th:text="${resumeData.personalInfo.phone}">+1-234-567-8900</span>
+                <span th:if="${resumeData.personalInfo.location and (resumeData.personalInfo.email or resumeData.personalInfo.phone)}">•</span>
+                <span th:if="${resumeData.personalInfo.location}" th:text="${resumeData.personalInfo.location}">City, State</span>
+            </div>
+            <div th:if="${resumeData.personalInfo.linkedIn or resumeData.personalInfo.portfolio}" class="text-gray-600 text-sm mt-1 space-x-4">
+                <span th:if="${resumeData.personalInfo.linkedIn}" th:text="${resumeData.personalInfo.linkedIn}">LinkedIn Profile</span>
+                <span th:if="${resumeData.personalInfo.portfolio and resumeData.personalInfo.linkedIn}">•</span>
+                <span th:if="${resumeData.personalInfo.portfolio}" th:text="${resumeData.personalInfo.portfolio}">Portfolio URL</span>
+            </div>
+        </header>
+
+        <!-- Summary -->
+        <section th:if="${resumeData.summary}" class="mb-8">
+            <p class="text-gray-800 leading-relaxed" th:text="${resumeData.summary}">Professional summary content here...</p>
+        </section>
+
+        <!-- Experience -->
+        <section th:if="${resumeData.experience and not #lists.isEmpty(resumeData.experience)}" class="mb-8">
+            <h2 class="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">Experience</h2>
+            <div class="space-y-6">
+                <div th:each="exp : ${resumeData.experience}" class="experience-item">
+                    <div class="flex justify-between items-baseline mb-1">
+                        <h3 class="font-medium text-gray-900" th:text="${exp.position}">Position Title</h3>
+                        <span class="text-gray-500 text-sm">
+                            <span th:text="${exp.startDate}">Start Date</span> - 
+                            <span th:text="${exp.current ? 'Present' : exp.endDate}">End Date</span>
+                        </span>
+                    </div>
+                    <p class="text-gray-700 mb-2" th:text="${exp.company}">Company Name</p>
+                    <p th:if="${exp.description}" class="text-gray-600 text-sm leading-relaxed" th:text="${exp.description}">Job description and achievements...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section th:if="${resumeData.education and not #lists.isEmpty(resumeData.education)}" class="mb-8">
+            <h2 class="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">Education</h2>
+            <div class="space-y-4">
+                <div th:each="edu : ${resumeData.education}" class="education-item">
+                    <div class="flex justify-between items-baseline">
+                        <div>
+                            <h3 class="font-medium text-gray-900" th:text="${edu.degree}">Degree</h3>
+                            <p class="text-gray-700" th:text="${edu.institution}">Institution Name</p>
+                            <p class="text-gray-600 text-sm" th:text="${edu.field}">Field of Study</p>
+                            <p th:if="${edu.gpa}" class="text-gray-600 text-sm">GPA: <span th:text="${edu.gpa}">3.8</span></p>
+                        </div>
+                        <span class="text-gray-500 text-sm">
+                            <span th:text="${edu.startDate}">Start</span> - <span th:text="${edu.endDate}">End</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section th:if="${resumeData.skills and not #lists.isEmpty(resumeData.skills)}" class="mb-8">
+            <h2 class="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">Skills</h2>
+            <div class="space-y-2">
+                <div th:each="skillCategory : ${resumeData.skills}" class="skill-category">
+                    <span class="font-medium text-gray-900" th:text="${skillCategory.category + ': '}">Category: </span>
+                    <span class="text-gray-700" th:text="${#strings.listJoin(skillCategory.items, ', ')}">Skill 1, Skill 2, Skill 3</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section th:if="${resumeData.projects and not #lists.isEmpty(resumeData.projects)}" class="mb-8">
+            <h2 class="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">Projects</h2>
+            <div class="space-y-4">
+                <div th:each="project : ${resumeData.projects}" class="project-item">
+                    <div class="flex justify-between items-baseline mb-1">
+                        <h3 class="font-medium text-gray-900" th:text="${project.name}">Project Name</h3>
+                        <a th:if="${project.link}" th:href="${project.link}" class="text-gray-500 text-sm hover:underline" th:text="${project.link}">Project Link</a>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-2" th:text="${project.description}">Project description and impact...</p>
+                    <p th:if="${project.technologies and not #lists.isEmpty(project.technologies)}" class="text-gray-500 text-xs">
+                        <span th:text="${#strings.listJoin(project.technologies, ' • ')}">Tech1 • Tech2 • Tech3</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Print Styles -->
+    <style>
+        @media print {
+            body { background: white; padding: 0; }
+            .shadow-lg { box-shadow: none; }
+        }
+    </style>
+</body>
+</html>
