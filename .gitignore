@@ -1,4 +1,4 @@
 .env
-.vscode
+.vscode/
 release-all.sh
 release.sh
