@@ -16,10 +16,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-  cloud:
-    config:
-      enabled: false
-
 eureka:
   client:
     service-url:
