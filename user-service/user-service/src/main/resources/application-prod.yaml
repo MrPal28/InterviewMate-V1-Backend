@@ -4,6 +4,14 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        "[show_sql]": false
+    hibernate:
+      ddl-auto: update
+
 
   kafka:
     producer:
@@ -28,3 +36,34 @@ eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
+
+
+server:
+  port: ${USER_SERVICE_SERVER_PORT}
+
+logging:
+  level:
+    root: INFO
+    "[com.interviewmate.gateway]": INFO
+    "[com.interviewmate.userservice]": INFO
+    "[com.interviewmate.walletservice]": INFO
+    "[com.interviewmate.transactionservice]": INFO
+    "[org.springframework]": INFO
+    "[org.hibernate.SQL]": DEBUG
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": TRACE
+    "[org.springframework.cache]": DEBUG
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+  file:
+    name: logs/interviewmate-app.log
+
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 30
+
+jwt:
+  secret: ${JWT_SECRET}

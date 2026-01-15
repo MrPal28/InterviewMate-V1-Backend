@@ -1,5 +1,6 @@
 #application-dev.properties
-
+server:
+  port: ${JUDGE_WORKER_SERVER_PORT}
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}

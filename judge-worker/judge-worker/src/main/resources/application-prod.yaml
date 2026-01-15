@@ -1,5 +1,6 @@
 #application-prod.properties
-
+server:
+  port: ${JUDGE_WORKER_SERVER_PORT}
 spring:
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS}

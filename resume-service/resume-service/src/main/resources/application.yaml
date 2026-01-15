@@ -3,50 +3,10 @@ spring:
     name: resume-service
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-# -------------------
-# JPA (shared)
-# -------------------
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        "[show_sql]": true
-    hibernate:
-      ddl-auto: update
-  
-# -------------------
-# Cache (shared)
-# -------------------
-  cache:
-    type: redis
-    redis:
-      time-to-live: 1h
 
 
-server:
-  port: ${RESUME_SERVICE_SERVER_PORT}
 
 
-# -------------------
-# Cloudinary (shared)
-# -------------------
-cloudinary:
-  cloud-name: ${CLOUDINARY_CLOUD_NAME}
-  api-key: ${CLOUDINARY_API_KEY}
-  api-secret: ${CLOUDINARY_API_SECRET}
 
 
-# -------------------
-# Logging (shared)
-# -------------------
-logging:
-  level:
-    root: INFO
-    "[com.interviewmate.resumeservice]": INFO
-    "[org.springframework]": INFO
-    "[org.springframework.cache]": DEBUG
-    "[org.hibernate.SQL]": DEBUG
-    "[org.hibernate.type.descriptor.sql.BasicBinder]": TRACE
 
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

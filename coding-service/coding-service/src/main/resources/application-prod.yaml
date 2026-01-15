@@ -4,8 +4,6 @@ server:
   port: ${CODING_SERVICE_PORT:8085}
 
 spring:
-  application:
-    name: ${CODING_SERVICE_NAME:coding-service}
 
   mongodb:
     uri: ${MONGO_URI}

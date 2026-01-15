@@ -4,3 +4,5 @@ spring:
   profiles:
     active:
       - ${SPRING_PROFILE_ACTIVE:dev}
+  application:
+    name: coding-service
