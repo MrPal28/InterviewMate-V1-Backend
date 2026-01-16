@@ -39,7 +39,7 @@ management:
         include: "health,info,env,refresh"
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: always
 
 
 eureka:

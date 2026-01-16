@@ -5,14 +5,16 @@ spring:
     name: judge-worker
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
+  config:
+    import: "configserver:http://config-server:8888"
+
   cloud:
     config:
       fail-fast: true
       username: ${CONFIG_SERVER_USERNAME:devconfig}
       password: ${CONFIG_SERVER_PASSWORD:devconfig}
-      discovery:
-        enabled: true
-        service-id: config-server
-
-  config:
-    import: "optional:configserver:"
+      retry:
+        max-attempts: 10
+        initial-interval: 2000
+        max-interval: 15000
+        multiplier: 1.5
