@@ -6,3 +6,14 @@ spring:
       - ${SPRING_PROFILE_ACTIVE:dev}
   application:
     name: coding-service
+  cloud:
+    config:
+      fail-fast: true
+      username: ${CONFIG_SERVER_USERNAME:devconfig}
+      password: ${CONFIG_SERVER_PASSWORD:devconfig}
+      discovery:
+        enabled: true
+        service-id: config-server
+
+  config:
+    import: "optional:configserver:"

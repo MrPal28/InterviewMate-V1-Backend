@@ -3,8 +3,9 @@ server:
   shutdown: graceful
 
 spring:
-  application:
-    name: config-server
+  docker:
+    compose:
+      enabled: false
 
   lifecycle:
     timeout-per-shutdown-phase: 15s

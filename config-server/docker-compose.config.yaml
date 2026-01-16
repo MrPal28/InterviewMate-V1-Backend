@@ -3,10 +3,10 @@ services:
   config-server:
     image: arindampal28/interviewmate-config-server:latest
     container_name: backend-config-server
-    ports:
-      - "8888:8888"
+    expose:
+      - "8888" 
     env_file: 
-      - ../../.env
+      - ../.env
 
     networks:
       - interviewmate-network

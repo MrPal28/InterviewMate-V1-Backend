@@ -20,6 +20,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      config-server:
+        condition: service_started
 
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1"]

@@ -18,6 +18,8 @@ services:
         condition: service_healthy
       eureka-server:
         condition: service_started
+      config-server:
+        condition: service_started
 
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1"]

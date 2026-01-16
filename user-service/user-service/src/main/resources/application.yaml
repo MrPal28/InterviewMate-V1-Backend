@@ -3,3 +3,14 @@ spring:
     name: user-service
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
+  cloud:
+    config:
+      fail-fast: true
+      username: ${CONFIG_SERVER_USERNAME:devconfig}
+      password: ${CONFIG_SERVER_PASSWORD:devconfig}
+      discovery:
+        enabled: true
+        service-id: config-server
+
+  config:
+    import: "optional:configserver:"
