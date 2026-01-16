@@ -1,24 +1,27 @@
 
 services:
-  judge-worker:
-    image: arindampal28/interviewmate-judge-worker:latest
-    container_name: backend-judge-worker
+  coding-service:
+    image: arindampal28/interviewmate-coding-service:latest
+    container_name: backend-coding-service
     env_file:
-      - ../../.env
+      - ../.env
+
     networks:
       - interviewmate-network
 
     depends_on:
-      kafka:
+       kafka:
         condition: service_healthy
-      judge0-api:
+       eureka-server:
         condition: service_started
-      config-server:
+       config-server:
         condition: service_started
+      
+        
 
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8086/actuator/health || exit 1"]
-      interval: 15s
+      test: ["CMD-SHELL", "curl -f http://localhost:8085/actuator/health || exit 1"]
+      interval: 10s
       retries: 10
       start_period: 40s
 
