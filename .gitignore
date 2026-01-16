@@ -2,3 +2,4 @@
 .vscode/
 release-all.sh
 release.sh
+logs
