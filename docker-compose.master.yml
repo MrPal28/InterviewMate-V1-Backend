@@ -175,6 +175,7 @@ include:
   # -------- Core Infra --------
   - docker-compose.infra.yml          # mysql, redis, kafka, mongo
   - eureka-server\eureka-server\docker-compose.eureka.yml        # service discovery
+  - config-server\docker-compose.config.yaml
 
   # -------- Entry Point --------
   - api-gateway\api-gateway\docker-compose.gateway.yml        # ONLY exposed service
