@@ -3,6 +3,7 @@ services:
   resume-service:
     image: arindampal28/interviewmate-resume-service:latest
     container_name: backend-resume-service
+    restart: unless-stopped
     env_file: 
       - ../../.env
     networks:
