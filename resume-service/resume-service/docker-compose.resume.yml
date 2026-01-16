@@ -4,7 +4,7 @@ services:
     image: arindampal28/interviewmate-resume-service:latest
     container_name: backend-resume-service
     env_file: 
-      - ../.env
+      - ../../.env
     networks:
       - interviewmate-network
 
