@@ -27,10 +27,10 @@ public class TestCaseController {
     @PostMapping("/problems/{problemId}/test-cases/bulk")
     public ResponseEntity<List<TestCase>> bulkCreateTestCases(
             @PathVariable String problemId,
-            @Valid @RequestBody List<CreateTestCaseRequest> requests) {
+            @Valid @RequestBody List<CreateTestCaseRequest> requests, @RequestHeader("X-User-Id") String userId) {
 
         List<TestCase> created =
-                testCaseService.bulkCreateTestCases(problemId, requests);
+                testCaseService.bulkCreateTestCases(problemId, requests, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -40,10 +40,10 @@ public class TestCaseController {
      */
     @GetMapping("/problems/{problemId}/test-cases")
     public ResponseEntity<List<TestCase>> getAllTestCases(
-            @PathVariable String problemId) {
+            @PathVariable String problemId , @RequestHeader("X-User-Id") String userId) {
 
         return ResponseEntity.ok(
-                testCaseService.getAllTestCasesForProblem(problemId)
+                testCaseService.getAllTestCasesForProblem(problemId, userId)
         );
     }
 
@@ -53,10 +53,10 @@ public class TestCaseController {
     @PutMapping("/test-cases/{testCaseId}")
     public ResponseEntity<TestCase> updateTestCase(
             @PathVariable String testCaseId,
-            @Valid @RequestBody UpdateTestCaseRequest request) {
+            @Valid @RequestBody UpdateTestCaseRequest request, @RequestHeader("X-User-Id") String userId) {
 
         return ResponseEntity.ok(
-                testCaseService.updateTestCase(testCaseId, request)
+                testCaseService.updateTestCase(testCaseId, request, userId)
         );
     }
 
@@ -65,7 +65,7 @@ public class TestCaseController {
      */
     @DeleteMapping("/test-cases/{testCaseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTestCase(@PathVariable String testCaseId) {
-        testCaseService.deleteTestCase(testCaseId);
+    public void deleteTestCase(@PathVariable String testCaseId, @RequestHeader("X-User-Id") String userId) {
+        testCaseService.deleteTestCase(testCaseId, userId);
     }
 }

@@ -1,11 +1,13 @@
 package com.interviewmate.codingservice.service.implementation;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.interviewmate.codingservice.dto.problemDto.CreateTestCaseRequest;
 import com.interviewmate.codingservice.dto.problemDto.UpdateTestCaseRequest;
+import com.interviewmate.codingservice.entity.Problem;
 import com.interviewmate.codingservice.entity.TestCase;
 import com.interviewmate.codingservice.exception.ProblemNotFoundException;
 import com.interviewmate.codingservice.exception.TestCaseNotFoundException;
@@ -28,21 +30,30 @@ public class TestCaseServiceImpl implements TestCaseService {
     @Override
     public List<TestCase> bulkCreateTestCases(
             String problemId,
-            List<CreateTestCaseRequest> requests) {
+            List<CreateTestCaseRequest> requests,
+            String userId) {
 
-        validateProblem(problemId);
+        Problem problem = problemRepository.findById(problemId)
+                .orElseThrow(() -> new ProblemNotFoundException(problemId));
+
+        if (!problem.getCreatedBy().equals(userId)) {
+            throw new SecurityException(
+                    "Only the problem creator can add test cases");
+        }
 
         List<TestCase> testCases = requests.stream()
                 .map(req -> TestCase.builder()
                         .problemId(problemId)
-                        .stdin(req.getStdin())           //  NEW
-                        .stdout(req.getStdout())         // NEW
-                        .hidden(req.isHidden())          //  NEW
+                        .createdBy(userId)
+                        .stdin(req.getStdin())
+                        .stdout(req.getStdout())
+                        .hidden(req.isHidden())
                         .build())
                 .toList();
 
         return testCaseRepository.saveAll(testCases);
     }
+
 
     // ==========================
     // READ (ALL)
@@ -70,10 +81,19 @@ public class TestCaseServiceImpl implements TestCaseService {
     @Override
     public TestCase updateTestCase(
             String testCaseId,
-            UpdateTestCaseRequest request) {
+            UpdateTestCaseRequest request,
+            String userId) {
 
         TestCase existing = testCaseRepository.findById(testCaseId)
                 .orElseThrow(() -> new TestCaseNotFoundException(testCaseId));
+
+        Problem problem = problemRepository.findById(existing.getProblemId())
+                .orElseThrow(() -> new ProblemNotFoundException(existing.getProblemId()));
+
+        if (!problem.getCreatedBy().equals(userId)) {
+            throw new SecurityException(
+                    "Only the problem creator can update test cases");
+        }
 
         existing.setStdin(request.getStdin());
         existing.setStdout(request.getStdout());
@@ -82,19 +102,26 @@ public class TestCaseServiceImpl implements TestCaseService {
         return testCaseRepository.save(existing);
     }
 
+
     // ==========================
     // DELETE
     // ==========================
     @Override
-    public void deleteTestCase(String testCaseId) {
+    public void deleteTestCase(String testCaseId, String userId) {
 
-        if (!testCaseRepository.existsById(testCaseId)) {
-            throw new TestCaseNotFoundException(testCaseId);
+        TestCase existing = testCaseRepository.findById(testCaseId)
+                .orElseThrow(() -> new TestCaseNotFoundException(testCaseId));
+
+        Problem problem = problemRepository.findById(existing.getProblemId())
+                .orElseThrow(() -> new ProblemNotFoundException(existing.getProblemId()));
+
+        if (!problem.getCreatedBy().equals(userId)) {
+            throw new SecurityException(
+                    "Only the problem creator can delete test cases");
         }
 
-        testCaseRepository.deleteById(testCaseId);
+        testCaseRepository.delete(existing);
     }
-
 
 
     // ==========================
@@ -113,8 +140,17 @@ public class TestCaseServiceImpl implements TestCaseService {
     }
 
     @Override
-    public List<TestCase> getAllTestCasesForProblem(String problemId) {
-        validateProblem(problemId);
+    public List<TestCase> getAllTestCasesForProblem(String problemId, String userId) {
+
+        Problem problem = problemRepository.findById(problemId)
+                .orElseThrow(() -> new ProblemNotFoundException(problemId));
+
+        if (!problem.getCreatedBy().equals(userId)) {
+            throw new SecurityException(
+                    "You are not allowed to view test cases for this problem");
+        }
+
         return testCaseRepository.findByProblemId(problemId);
     }
+
 }

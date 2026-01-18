@@ -19,6 +19,7 @@ import com.interviewmate.codingservice.dto.problemDto.ProblemResponse;
 import com.interviewmate.codingservice.dto.problemDto.UpdateProblemRequest;
 import com.interviewmate.codingservice.entity.Problem;
 import com.interviewmate.codingservice.exception.ProblemNotFoundException;
+import com.interviewmate.codingservice.exception.UserNotFoundException;
 import com.interviewmate.codingservice.mapper.ProblemMapper;
 import com.interviewmate.codingservice.repository.ProblemRepository;
 import com.interviewmate.codingservice.service.CodeTemplateService;
@@ -43,12 +44,15 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public ProblemResponse createProblem(CreateProblemRequest request) {
+    public ProblemResponse createProblem(CreateProblemRequest request, String userId) {
+        if(userId == null || userId.isEmpty()) {
+            throw new UserNotFoundException("User ID cannot be null or empty");
+        }
         if (problemRepository.existsBySlug(request.getSlug())) {
             throw new IllegalArgumentException(
                     "Problem already exists with slug: " + request.getSlug());
         }
-        Problem problem = problemMapper.toEntity(request);
+        Problem problem = problemMapper.toEntity(request,userId);
         Problem savedProblem = problemRepository.save(problem);
         List<CreateCodeTemplateRequest> codeTemplates = request.getCodeTemplates();
         List<CodeTemplateResponse> codeTemplateEntities = codeTemplateService.createCodeTemplates(savedProblem.getId(),codeTemplates);
@@ -101,7 +105,10 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Transactional
     @Override
-    public void deleteProblem(String id) {
+    public void deleteProblem(String id, String userId) {
+        if(userId==null || userId.isEmpty()) {
+            throw new UserNotFoundException("User ID cannot be null or empty");
+        }
 
         if (!problemRepository.existsById(id)) {
             throw new ProblemNotFoundException(id);
@@ -113,7 +120,11 @@ public class ProblemServiceImpl implements ProblemService {
 
 
     @Override
-    public BulkCreateProblemResponse bulkCreateProblems(BulkCreateProblemRequest request) {
+    public BulkCreateProblemResponse bulkCreateProblems(BulkCreateProblemRequest request, String userId) {
+
+        if(userId == null || userId.isEmpty()) {
+            throw new UserNotFoundException("User ID cannot be null or empty");
+        }
         List<ProblemResponse> createdProblems = new ArrayList<>();
         List<BulkCreateError> errors = new ArrayList<>();
 
@@ -133,7 +144,7 @@ public class ProblemServiceImpl implements ProblemService {
             // 2. Save problem
             Problem problem =
                     problemRepository.save(
-                        problemMapper.toEntity(problemRequest)
+                        problemMapper.toEntity(problemRequest, userId)
                     );
             List<CodeTemplateResponse> codeTemplates = codeTemplateService.createCodeTemplates(problem.getId(),problemRequest.getCodeTemplates());
 
@@ -159,7 +170,11 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-public ProblemResponse updateProblem(String problemId, UpdateProblemRequest request) {
+public ProblemResponse updateProblem(String problemId, UpdateProblemRequest request, String userId) {
+
+    if(userId == null || userId.isEmpty()) {
+        throw new UserNotFoundException("User ID cannot be null or empty");
+    }
 
     Problem problem = problemRepository.findById(problemId)
         .orElseThrow(() -> new NotFoundException("Problem not found"));

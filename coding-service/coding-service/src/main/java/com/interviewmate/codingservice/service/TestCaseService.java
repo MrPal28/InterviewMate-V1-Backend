@@ -11,18 +11,18 @@ public interface TestCaseService {
 
     List<TestCase> bulkCreateTestCases(
             String problemId,
-            List<CreateTestCaseRequest> requests);
+            List<CreateTestCaseRequest> requests, String userId);
 
     List<TestCase> getTestCasesForProblem(String problemId, boolean hidden);
 
     List<TestCase> getPublicTestCasesForProblem(String problemId);
 
-    TestCase updateTestCase(String testCaseId, UpdateTestCaseRequest request);
+    TestCase updateTestCase(String testCaseId, UpdateTestCaseRequest request, String userId);
 
-    void deleteTestCase(String testCaseId);
+    void deleteTestCase(String testCaseId, String userId);
 
     void deleteTestCasesByProblemId(String problemId);
 
-    List<TestCase> getAllTestCasesForProblem(String problemId);
+    List<TestCase> getAllTestCasesForProblem(String problemId, String userId);
 
 }

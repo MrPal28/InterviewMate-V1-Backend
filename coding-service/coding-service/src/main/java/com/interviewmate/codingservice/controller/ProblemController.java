@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +36,8 @@ public class ProblemController {
 
   @PostMapping("/problems")
   public ResponseEntity<ProblemResponse> createProblem(
-      @Valid @RequestBody CreateProblemRequest request) {
-    return ResponseEntity.ok(problemService.createProblem(request));
+      @Valid @RequestBody CreateProblemRequest request , @RequestHeader("X-User-Id") String userId) {
+    return ResponseEntity.ok(problemService.createProblem(request, userId));
   }
 
   @GetMapping("/problems/{id}")
@@ -59,24 +60,24 @@ public class ProblemController {
 
 
   @DeleteMapping("/problems/{id}")
-  public ResponseEntity<Void> deleteProblem(@PathVariable String id) {
-    problemService.deleteProblem(id);
+  public ResponseEntity<Void> deleteProblem(@PathVariable String id , @RequestHeader("X-User-Id") String userId) {
+    problemService.deleteProblem(id , userId);
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/problems/bulk")
   public ResponseEntity<BulkCreateProblemResponse> bulkCreateProblems(
-      @Valid @RequestBody BulkCreateProblemRequest request) {
+      @Valid @RequestBody BulkCreateProblemRequest request , @RequestHeader("X-User-Id") String userId) {
 
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(problemService.bulkCreateProblems(request));
+        .body(problemService.bulkCreateProblems(request, userId));
   }
 
   @PutMapping("/problems/{id}")
   public ResponseEntity<ProblemResponse> updateProblem(
       @PathVariable String id,
-      @Valid @RequestBody UpdateProblemRequest request) {
-    return ResponseEntity.ok(problemService.updateProblem(id, request));
+      @Valid @RequestBody UpdateProblemRequest request, @RequestHeader("X-User-Id") String userId) {
+    return ResponseEntity.ok(problemService.updateProblem(id, request, userId));
   }
   
 

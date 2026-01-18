@@ -18,7 +18,7 @@ import com.interviewmate.codingservice.entity.SampleIO;
 @Component
 public class ProblemMapper {
 
-        public Problem toEntity(CreateProblemRequest dto) {
+        public Problem toEntity(CreateProblemRequest dto, String userId) {
                 return Problem.builder()
                                 .title(dto.getTitle())
                                 .slug(dto.getSlug())
@@ -31,6 +31,7 @@ public class ProblemMapper {
                                                                 .collect(Collectors.toList()))
                                 .companies(dto.getCompanies())
                                 .premium(dto.isPremium())
+                                .createdBy(userId)
                                 .build();
         }
 

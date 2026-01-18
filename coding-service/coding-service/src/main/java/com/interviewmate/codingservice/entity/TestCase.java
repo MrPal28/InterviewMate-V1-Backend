@@ -26,6 +26,7 @@ public class TestCase {
 
     /** Reference to problem */
     private String problemId; //FK
+    private String createdBy; // x-user-id
 
     /**
      * EXACT input fed to the program via STDIN.
