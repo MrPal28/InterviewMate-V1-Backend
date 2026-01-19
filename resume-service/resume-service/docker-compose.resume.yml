@@ -5,7 +5,7 @@ services:
     container_name: backend-resume-service
     restart: unless-stopped
     env_file: 
-      - ../../.env
+      - .env
     networks:
       - interviewmate-network
 

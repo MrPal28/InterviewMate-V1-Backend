@@ -17,7 +17,7 @@ spring:
 
   # WebFlux / Netty Tuning
   webflux:
-    base-path: /api/v1
+    base-path: /api/v1/interview
 
   codec:
     max-in-memory-size: 20MB
@@ -74,12 +74,12 @@ spring:
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-  # Eureka Client
-  cloud:
-    discovery:
-      enabled: true
-
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 eureka:
   client:
     service-url:

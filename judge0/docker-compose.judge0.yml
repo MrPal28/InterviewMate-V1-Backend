@@ -40,11 +40,11 @@ services:
     command: ["./scripts/workers"]
 
     env_file:
-      - judge0.conf
-
+    - judge0.conf
     environment:
-      REDIS_HOST: REDIS
+      REDIS_HOST: judge0-redis-interviewmate
       REDIS_PORT: 6379
+      REDIS_PASSWORD: judge0redis
 
     privileged: true
     <<: *default-logging
