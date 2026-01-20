@@ -2,6 +2,8 @@
 .vscode/
 release-all.sh
 release.sh
+release-ai.sh
 logs
 config-server.zip
 InterviewService.zip
+VERSION-AI

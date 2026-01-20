@@ -18,3 +18,11 @@ include:
   # -------- Judge / Execution Engine --------
   - judge0\docker-compose.judge0.yml
   - judge-worker\judge-worker\docker-compose.judge-worker.yml
+
+  # -------- Interview Services --------
+  - interview-service-ai\AudioAnswerConverterService\docker-compose.audio-answer-converter.yml
+  - interview-service-ai\BehavioralAnalysisService\docker-compose.behavioral-analysis.yml
+  - interview-service-ai\InterviewQuestionService\docker-compose.interview-question.yml
+  - interview-service-ai\InterviewReportService\docker-compose.interview-report.yml
+  - interview-service-ai\VideoAudioSeperatorService\docker-compose.video-audio-seperator.yml
+  - interview-service-ai\Client\docker-compose-client.yml
