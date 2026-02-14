@@ -1,6 +1,5 @@
 package com.interviewmate.interviewservice.repository.mongorepo;
 
-import java.util.List;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
