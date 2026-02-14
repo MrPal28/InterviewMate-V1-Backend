@@ -17,14 +17,32 @@ import java.util.List;
 @AllArgsConstructor
 @RedisHash("INTERVIEW_SESSION")
 public class InterviewSession implements Serializable {
+
+
     @Id
-    private String sessionId;
+    private String sessionId;          
     private String userId;
-    private List<String> questions;
+
+    
+    private String resumeUrl;
+    private boolean specificQuestionRequirement;
+    private List<String> subjectOrTopic;
     private int totalQuestions;
+    private String level;
+
+    
+    private int currentQuestion;       
     private int remainingQuestions;
-    private int currentQuestion;
-    private InterviewStatus status;
-    private boolean secondSlotFetched;
+
+    private boolean slotOneFetched;
+    private boolean slotTwoFetched;
+
+    private InterviewStatus status;    
+
+    
+    private List<String> questions;    
+
+    
     private Instant createdAt;
+    private Instant updatedAt;
 }

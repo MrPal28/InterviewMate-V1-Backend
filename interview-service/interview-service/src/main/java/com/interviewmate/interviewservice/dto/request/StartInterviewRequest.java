@@ -10,16 +10,13 @@ import lombok.Data;
 public class StartInterviewRequest {
 
     @NotBlank
-    private String userId;
-
-    @NotBlank
     private String resumeUrl;
 
     private boolean specificQuestionRequirement;
 
     private List<String> subjectOrTopic; // nullable
 
-    @Min(1)
+    @Min(10)
     private int numberOfQuestions;
 
     @NotBlank

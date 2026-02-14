@@ -1,15 +1,17 @@
 package com.interviewmate.interviewservice.client.python;
 
-
 import com.interviewmate.interviewservice.dto.request.PythonInitInterviewRequest;
+import com.interviewmate.interviewservice.dto.request.PythonSecondSlotRequest;
 import com.interviewmate.interviewservice.dto.response.PythonInitInterviewResponse;
-
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -27,7 +29,7 @@ public class PythonInterviewClient {
             PythonInitInterviewRequest request) {
 
         return pythonInterviewWebClient.post()
-                .uri("/interviewservice/api/v1/initializeinterview/getfirstslotquestion")
+                .uri("initializeinterview/getfirstslotquestion")
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(PythonInitInterviewResponse.class);
@@ -37,12 +39,23 @@ public class PythonInterviewClient {
     @Retry(name = CB_NAME)
     @TimeLimiter(name = CB_NAME)
     public Mono<PythonInitInterviewResponse> getSecondSlotQuestions(
-            Object request) {
+            PythonSecondSlotRequest request) {
 
         return pythonInterviewWebClient.post()
-                .uri("/interviewservice/api/v1/initializeinterview/getsecondslotquestion")
+                .uri("initializeinterview/getsecondslotquestion")
                 .bodyValue(request)
                 .retrieve()
+                .onStatus(
+                        status -> status == HttpStatus.ACCEPTED,
+                        clientResponse ->
+                                Mono.error(new WebClientResponseException(
+                                        HttpStatus.ACCEPTED.value(),
+                                        "Second slot questions are still processing",
+                                        HttpHeaders.EMPTY,
+                                        null,
+                                        null
+                                ))
+                )
                 .bodyToMono(PythonInitInterviewResponse.class);
     }
 }

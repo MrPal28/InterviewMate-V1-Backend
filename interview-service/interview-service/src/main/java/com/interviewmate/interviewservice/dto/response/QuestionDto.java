@@ -1,4 +1,4 @@
-package com.interviewmate.interviewservice.dto;
+package com.interviewmate.interviewservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

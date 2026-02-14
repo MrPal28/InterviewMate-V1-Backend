@@ -7,26 +7,26 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
-@Configuration
-public class CorsConfig {
+// @Configuration
+// public class CorsConfig {
 
-    // @Value("${frontend.url}")
-    // private String frontendUrl;
+//     // @Value("${frontend.url}")
+//     // private String frontendUrl;
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/v1/**")
-                        .allowedOrigins("http://localhost:5173")  // your frontend (Vite/React)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .exposedHeaders("Content-Type")
-                        .allowCredentials(false)
-                        .maxAge(3600);
-            }
-        };
-    }
-}
+//     @Bean
+//     public WebMvcConfigurer corsConfigurer() {
+//         return new WebMvcConfigurer() {
+//             @Override
+//             public void addCorsMappings(CorsRegistry registry) {
+//                 registry.addMapping("/api/v1/**")
+//                         .allowedOrigins("http://localhost:5173")  // your frontend (Vite/React)
+//                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//                         .allowedHeaders("*")
+//                         .exposedHeaders("Content-Type")
+//                         .allowCredentials(false)
+//                         .maxAge(3600);
+//             }
+//         };
+//     }
+// }
 

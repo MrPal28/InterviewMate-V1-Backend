@@ -36,7 +36,7 @@ public class ProblemController {
 
   @PostMapping("/problems")
   public ResponseEntity<ProblemResponse> createProblem(
-      @Valid @RequestBody CreateProblemRequest request , @RequestHeader("X-User-Id") String userId) {
+      @Valid @RequestBody CreateProblemRequest request , @RequestHeader("x-user-id") String userId) {
     return ResponseEntity.ok(problemService.createProblem(request, userId));
   }
 
@@ -60,14 +60,14 @@ public class ProblemController {
 
 
   @DeleteMapping("/problems/{id}")
-  public ResponseEntity<Void> deleteProblem(@PathVariable String id , @RequestHeader("X-User-Id") String userId) {
+  public ResponseEntity<Void> deleteProblem(@PathVariable String id , @RequestHeader("x-user-id") String userId) {
     problemService.deleteProblem(id , userId);
     return ResponseEntity.ok().build();
   }
 
   @PostMapping("/problems/bulk")
   public ResponseEntity<BulkCreateProblemResponse> bulkCreateProblems(
-      @Valid @RequestBody BulkCreateProblemRequest request , @RequestHeader("X-User-Id") String userId) {
+      @Valid @RequestBody BulkCreateProblemRequest request , @RequestHeader("x-user-id") String userId) {
 
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(problemService.bulkCreateProblems(request, userId));
@@ -76,7 +76,7 @@ public class ProblemController {
   @PutMapping("/problems/{id}")
   public ResponseEntity<ProblemResponse> updateProblem(
       @PathVariable String id,
-      @Valid @RequestBody UpdateProblemRequest request, @RequestHeader("X-User-Id") String userId) {
+      @Valid @RequestBody UpdateProblemRequest request, @RequestHeader("x-user-id") String userId) {
     return ResponseEntity.ok(problemService.updateProblem(id, request, userId));
   }
   

@@ -18,9 +18,9 @@ public class WebClientConfig {
 
     @Bean
     public WebClient pythonInterviewWebClient(
-            @Value("${python.interview.base-url}") String baseUrl,
-            @Value("${python.interview.timeout.connect}") Duration connectTimeout,
-            @Value("${python.interview.timeout.read}") Duration readTimeout
+            @Value("${python.interview.base-url:http://localhost:8000/interviewservice/api/v1/}") String baseUrl,
+            @Value("${python.interview.timeout.connect:3s}") Duration connectTimeout,
+            @Value("${python.interview.timeout.read:15s}") Duration readTimeout
     ) {
 
         HttpClient httpClient = HttpClient.create()
@@ -37,3 +37,4 @@ public class WebClientConfig {
                 .build();
     }
 }
+

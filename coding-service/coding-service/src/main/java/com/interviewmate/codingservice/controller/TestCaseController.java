@@ -27,7 +27,7 @@ public class TestCaseController {
     @PostMapping("/problems/{problemId}/test-cases/bulk")
     public ResponseEntity<List<TestCase>> bulkCreateTestCases(
             @PathVariable String problemId,
-            @Valid @RequestBody List<CreateTestCaseRequest> requests, @RequestHeader("X-User-Id") String userId) {
+            @Valid @RequestBody List<CreateTestCaseRequest> requests, @RequestHeader("x-user-id") String userId) {
 
         List<TestCase> created =
                 testCaseService.bulkCreateTestCases(problemId, requests, userId);
@@ -40,7 +40,7 @@ public class TestCaseController {
      */
     @GetMapping("/problems/{problemId}/test-cases")
     public ResponseEntity<List<TestCase>> getAllTestCases(
-            @PathVariable String problemId , @RequestHeader("X-User-Id") String userId) {
+            @PathVariable String problemId , @RequestHeader("x-user-id") String userId) {
 
         return ResponseEntity.ok(
                 testCaseService.getAllTestCasesForProblem(problemId, userId)
@@ -53,7 +53,7 @@ public class TestCaseController {
     @PutMapping("/test-cases/{testCaseId}")
     public ResponseEntity<TestCase> updateTestCase(
             @PathVariable String testCaseId,
-            @Valid @RequestBody UpdateTestCaseRequest request, @RequestHeader("X-User-Id") String userId) {
+            @Valid @RequestBody UpdateTestCaseRequest request, @RequestHeader("x-user-id") String userId) {
 
         return ResponseEntity.ok(
                 testCaseService.updateTestCase(testCaseId, request, userId)
@@ -65,7 +65,7 @@ public class TestCaseController {
      */
     @DeleteMapping("/test-cases/{testCaseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTestCase(@PathVariable String testCaseId, @RequestHeader("X-User-Id") String userId) {
+    public void deleteTestCase(@PathVariable String testCaseId, @RequestHeader("x-user-id") String userId) {
         testCaseService.deleteTestCase(testCaseId, userId);
     }
 }

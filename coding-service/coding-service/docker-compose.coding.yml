@@ -1,7 +1,7 @@
 
 services:
   coding-service:
-    image: arindampal28/interviewmate-coding-service:latest
+    image: arindampal28/interviewmate-coding-service:0.0.3
     container_name: backend-coding-service
     env_file:
       - ../../.env
@@ -16,7 +16,7 @@ services:
         condition: service_started
        config-server:
         condition: service_started
-      
+    
         
 
     healthcheck:
