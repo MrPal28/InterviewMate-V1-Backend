@@ -8,9 +8,6 @@ import lombok.Data;
 public class SecondSlotRequest {
 
     @NotBlank
-    private String userId;
-
-    @NotBlank
     private String sessionId;
 
     @Min(1)

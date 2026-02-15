@@ -10,8 +10,6 @@ import lombok.Data;
 public class SubmitAnswerRequest {
     @NotBlank
     private String sessionId;     
-    @NotBlank
-    private String userId;
     @Positive
     private int questionNo;
     @NotBlank

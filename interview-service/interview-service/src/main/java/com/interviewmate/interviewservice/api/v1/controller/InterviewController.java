@@ -31,8 +31,8 @@ public class InterviewController {
 
     @PostMapping("/next-slot")
     public Mono<StartInterviewResponse> fetchSecondSlot(
-            @Valid @RequestBody SecondSlotRequest request) {
-        return interviewOrchestrator.fetchSecondSlot(request);
+            @Valid @RequestBody SecondSlotRequest request , @RequestHeader("x-user-id") String userId) {
+        return interviewOrchestrator.fetchSecondSlot(request, userId);
     }
 
     @PostMapping("/submit-answer")

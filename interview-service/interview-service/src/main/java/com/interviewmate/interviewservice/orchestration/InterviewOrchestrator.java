@@ -115,7 +115,7 @@ public class InterviewOrchestrator {
                                 .toList();
         }
 
-        public Mono<StartInterviewResponse> fetchSecondSlot(SecondSlotRequest request) {
+        public Mono<StartInterviewResponse> fetchSecondSlot(SecondSlotRequest request , String userId) {
 
                 return Mono.fromCallable(() -> sessionRepository.findById(request.getSessionId()))
                                 .subscribeOn(Schedulers.boundedElastic())
@@ -136,7 +136,7 @@ public class InterviewOrchestrator {
                                                                                 "Interview is not in progress"));
                                         }
 
-                                        if (!session.getUserId().equals(request.getUserId())) {
+                                        if (!session.getUserId().equals(userId)) {
                                                 return Mono.error(
                                                                 new IllegalStateException(
                                                                                 "User does not own this session"));
@@ -159,7 +159,7 @@ public class InterviewOrchestrator {
                                          */
 
                                         PythonSecondSlotRequest pythonRequest = PythonSecondSlotRequest.builder()
-                                                        .userid(request.getUserId())
+                                                        .userid(userId)
                                                         .sessionid(session.getSessionId())
                                                         .remanning(session.getRemainingQuestions())
                                                         .level(session.getLevel())
@@ -169,9 +169,9 @@ public class InterviewOrchestrator {
                                                         .flatMap(pythonResponse -> {
 
                                                                 // Python returned slot-two questions
+                                                                List<String> slotTwoQuestions = pythonResponse.getSlottwoquestions();
                                                                 session.getQuestions()
-                                                                                .addAll(pythonResponse
-                                                                                                .getSlottwoquestions());
+                                                                                .addAll(slotTwoQuestions);
 
                                                                 session.setRemainingQuestions(0);
                                                                 session.setSlotTwoFetched(true);
@@ -181,7 +181,8 @@ public class InterviewOrchestrator {
                                                                                 () -> sessionRepository.save(session))
                                                                                 .subscribeOn(Schedulers
                                                                                                 .boundedElastic())
-                                                                                .map(this::buildResponse);
+                                                                                .map(savedSession -> buildSecondSlotResponse(savedSession, slotTwoQuestions));
+                                        
                                                         })
                                                         /*
                                                          * =========================
@@ -197,6 +198,19 @@ public class InterviewOrchestrator {
                                                                 return Mono.error(ex);
                                                         });
                                 });
+        }
+     
+        private StartInterviewResponse buildSecondSlotResponse(
+                        InterviewSession session,
+                        List<String> slotTwoQuestions) {
+                
+                return StartInterviewResponse.builder()
+                                .userId(session.getUserId())
+                                .sessionId(session.getSessionId())
+                                .questions(mapQuestions(slotTwoQuestions)) // only second slot
+                                .remaining(session.getRemainingQuestions())
+                                .totalQuestions(session.getTotalQuestions())
+                                .build();
         }
 
         private StartInterviewResponse buildResponse(InterviewSession session) {
