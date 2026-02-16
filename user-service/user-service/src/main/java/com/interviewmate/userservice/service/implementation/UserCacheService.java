@@ -26,7 +26,7 @@ public class UserCacheService {
     public UserResponse getUserProfileByEmail(String email) {
         log.info("Fetching from DB for email: {}", email);
         User user = userRepo.findByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException(email));
         return mapToUserResponse(user);
     }
 

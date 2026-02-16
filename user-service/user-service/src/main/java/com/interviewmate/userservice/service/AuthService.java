@@ -8,6 +8,6 @@ import com.interviewmate.userservice.dto.UserResponse;
 public interface AuthService {
   UserResponse register(RegisterRequestDTO request);
   LoginResponse login(LoginRequestDTO request);
-  boolean resetPassword(String email, String otp, String newPassword);
+  void resetPassword(String email, String otp, String newPassword);
   
 } 

@@ -2,11 +2,10 @@ package com.interviewmate.userservice.aspect;
 
 import java.util.Arrays;
 
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,32 +15,59 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LoggingAspect {
 
-    @Before("execution(* com.interviewmate.userservice.service..*(..)) || execution(* com.interviewmate.userservice.eventproducerandconsumer..*(..))")
-    public void logMethodEntry(JoinPoint joinPoint) {
-        String methodName = joinPoint.getSignature().toShortString();
-        Object[] args = Arrays.stream(joinPoint.getArgs())
-                .map(this::maskSensitive)
-                .toArray();
-        log.info("Entering method: {} with arguments: {}", methodName, Arrays.toString(args));
-    }
+    @Pointcut("execution(* com.interviewmate.userservice.service..*(..)) || " +
+              "execution(* com.interviewmate.userservice.eventproducerandconsumer..*(..))")
+    public void applicationLayer() {}
 
-    @AfterReturning(value = "execution(* com.interviewmate.userservice.service..*(..)) || execution(* com.interviewmate.userservice.eventproducerandconsumer..*(..))", returning = "result")
-    public void logMethodExit(JoinPoint joinPoint, Object result) {
-        String methodName = joinPoint.getSignature().toShortString();
-        log.info("Exiting method: {} with result: {}", methodName, maskSensitive(result));
-    }
+    @Around("applicationLayer()")
+    public Object logExecution(ProceedingJoinPoint joinPoint) throws Throwable {
 
-    @AfterThrowing(value = "execution(* com.interviewmate.userservice.service..*(..)) || execution(* com.interviewmate.userservice.eventproducerandconsumer..*(..))", throwing = "ex")
-    public void logMethodException(JoinPoint joinPoint, Throwable ex) {
         String methodName = joinPoint.getSignature().toShortString();
-        log.error("Exception in method: {} with message: {}", methodName, ex.getMessage(), ex);
+        long start = System.currentTimeMillis();
+
+        if (log.isInfoEnabled()) {
+            Object[] args = Arrays.stream(joinPoint.getArgs())
+                    .map(this::maskSensitive)
+                    .toArray();
+            log.info("Entering method: {} with arguments: {}", methodName, Arrays.toString(args));
+        }
+
+        try {
+            Object result = joinPoint.proceed();
+
+            long executionTime = System.currentTimeMillis() - start;
+
+            if (log.isDebugEnabled()) {
+                log.debug("Method {} returned: {}", methodName, maskSensitive(result));
+            }
+
+            log.info("Exiting method: {} | Execution time: {} ms", methodName, executionTime);
+
+            return result;
+
+        } catch (Throwable ex) {
+
+            long executionTime = System.currentTimeMillis() - start;
+
+            log.error("Exception in method: {} | Execution time: {} ms | Message: {}",
+                    methodName,
+                    executionTime,
+                    ex.getMessage(),
+                    ex);
+
+            throw ex;
+        }
     }
 
     private Object maskSensitive(Object arg) {
         if (arg == null) return null;
-        if (arg instanceof String && ((String) arg).contains("@")) return "*****@*****";
-        if (arg instanceof String && ((String) arg).matches("\\d{6}")) return "******";
-        if (arg instanceof String && ((String) arg).toLowerCase().contains("password")) return "********";
+
+        if (arg instanceof String str) {
+            if (str.contains("@")) return "*****@*****";
+            if (str.matches("\\d{6}")) return "******";
+            if (str.toLowerCase().contains("password")) return "********";
+        }
+
         return arg;
     }
 }

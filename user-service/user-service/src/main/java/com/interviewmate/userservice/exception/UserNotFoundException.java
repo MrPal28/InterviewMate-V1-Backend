@@ -1,7 +1,12 @@
 package com.interviewmate.userservice.exception;
 
-public class UserNotFoundException extends ApplicationException{
-  public UserNotFoundException(String msg){
-    super(msg);
-  }
+import org.springframework.http.HttpStatus;
+
+public class UserNotFoundException extends BaseException {
+
+    public UserNotFoundException(String email) {
+        super("User not found with email: " + email,
+              "USER_NOT_FOUND",
+              HttpStatus.NOT_FOUND);
+    }
 }

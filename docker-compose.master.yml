@@ -11,19 +11,19 @@ include:
 
   # -------- Business Services --------
   - user-service\user-service\docker-compose.user.yml
-  - resume-service\resume-service\docker-compose.resume.yml
-  - coding-service\coding-service\docker-compose.coding.yml
+  # - resume-service\resume-service\docker-compose.resume.yml
+  # - coding-service\coding-service\docker-compose.coding.yml
   - notification-service\notification-service\docker-compose.notification.yml
-  - interview-service\interview-service\docker-compose.interview.yml
+  # - interview-service\interview-service\docker-compose.interview.yml
 
   # -------- Judge / Execution Engine --------
-  - judge0\docker-compose.judge0.yml
-  - judge-worker\judge-worker\docker-compose.judge-worker.yml
+  # - judge0\docker-compose.judge0.yml
+  # - judge-worker\judge-worker\docker-compose.judge-worker.yml
 
   # -------- Interview Services --------
-  - interview-service-ai\AudioAnswerConverterService\docker-compose.audio-answer-converter.yml
-  - interview-service-ai\BehavioralAnalysisService\docker-compose.behavioral-analysis.yml
-  - interview-service-ai\InterviewQuestionService\docker-compose.interview-question.yml
-  - interview-service-ai\InterviewReportService\docker-compose.interview-report.yml
-  - interview-service-ai\VideoAudioSeperatorService\docker-compose.video-audio-seperator.yml
-  - interview-service-ai\Client\docker-compose-client.yml
+  # - interview-service-ai\AudioAnswerConverterService\docker-compose.audio-answer-converter.yml
+  # - interview-service-ai\BehavioralAnalysisService\docker-compose.behavioral-analysis.yml
+  # - interview-service-ai\InterviewQuestionService\docker-compose.interview-question.yml
+  # - interview-service-ai\InterviewReportService\docker-compose.interview-report.yml
+  # - interview-service-ai\VideoAudioSeperatorService\docker-compose.video-audio-seperator.yml
+  # - interview-service-ai\Client\docker-compose-client.yml

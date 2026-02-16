@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,8 @@ import com.interviewmate.userservice.dto.NewUserEvent;
 import com.interviewmate.userservice.dto.RegisterRequestDTO;
 import com.interviewmate.userservice.dto.UserResponse;
 import com.interviewmate.userservice.eventproducerandconsumer.NewUserRegistrationEventProducer;
-import com.interviewmate.userservice.exception.ApplicationException;
+import com.interviewmate.userservice.exception.InvalidCredentialsException;
+import com.interviewmate.userservice.exception.UserAlreadyExistsException;
 import com.interviewmate.userservice.exception.UserNotFoundException;
 import com.interviewmate.userservice.model.Company;
 import com.interviewmate.userservice.model.Education;
@@ -46,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public UserResponse register(RegisterRequestDTO request) {
     userRepo.findByEmail(request.getEmail()).ifPresent(u -> {
-			throw new ApplicationException("User Already Present");
+			 throw new UserAlreadyExistsException(request.getEmail());
 		});
 		User user = mapToUserEntity(request);
 		userRepo.save(user);
@@ -56,46 +58,44 @@ public class AuthServiceImpl implements AuthService {
     newUserEventProducer.sendMessageToKafka(user.getEmail(), userEvent);
     return userResponse;
   }
-
+  
   @Override
   public LoginResponse login(LoginRequestDTO request) {
-    // Authenticate the user (this will throw exception if invalid)
-    authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            request.getEmail(),
-            request.getPassword()));
+    try {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()));
 
-    // Load user details from DB
-    CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(request.getEmail());
-
-    // Generate JWT with claims (userId + role already added in JwtService)
-    final String jwtToken = jwtService.generateToken(userDetails);
-
-    // Build response (no password exposed)
-    return LoginResponse.builder()
-        .id(userDetails.getId()) //  include userId for frontend
-        .email(userDetails.getUsername()) // user’s email
-        .role(userDetails.getRole()) //  get actual role (STUDENT / EMPLOYEE / HR)
-        .token(jwtToken) // JWT for session
-        .build();
-  }
-
-   @Override
-  public boolean resetPassword(String email, String otp, String newPassword) {
-    boolean isValid = otpService.verifyOtp(email, otp);
-
-    if(!isValid){
-      throw new ApplicationException("Wrong OTP");
+    } catch (AuthenticationException ex) {
+        throw new InvalidCredentialsException();
     }
 
-    User user = userRepo.findByEmail(email)
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
+    CustomUserDetails userDetails =
+            (CustomUserDetails) userDetailsService.loadUserByUsername(request.getEmail());
 
-    user.setPassword(passwordEncoder.encode(newPassword));
-    userRepo.save(user);
-    return true;
-  }
+    final String jwtToken = jwtService.generateToken(userDetails);
 
+    return LoginResponse.builder()
+            .id(userDetails.getId())
+            .email(userDetails.getUsername())
+            .role(userDetails.getRole())
+            .token(jwtToken)
+            .build();
+}
+
+  @Override
+public void resetPassword(String email, String otp, String newPassword) {
+
+  // Will throw exception if invalid
+  otpService.verifyOtp(email, otp);
+
+  User user = userRepo.findByEmail(email)
+      .orElseThrow(() -> new UserNotFoundException(email));
+
+  user.setPassword(passwordEncoder.encode(newPassword));
+  userRepo.save(user);
+}
 
   private User mapToUserEntity(RegisterRequestDTO request) {
     User user = User.builder()

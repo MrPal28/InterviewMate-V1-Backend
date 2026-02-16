@@ -1,16 +1,18 @@
 package com.interviewmate.userservice.controller;
 
+import java.time.Instant;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.interviewmate.userservice.dto.ApiResponse;
 import com.interviewmate.userservice.dto.LoginRequestDTO;
 import com.interviewmate.userservice.dto.LoginResponse;
 import com.interviewmate.userservice.dto.OTPRequest;
-import com.interviewmate.userservice.dto.OTPVerificationRequest;
-import com.interviewmate.userservice.dto.PasswordResetRequest;
 import com.interviewmate.userservice.dto.RegisterRequestDTO;
 import com.interviewmate.userservice.dto.UserResponse;
 import com.interviewmate.userservice.service.AuthService;
@@ -42,26 +44,47 @@ public class AuthController {
 
   @PostMapping("/getotp")
   public ResponseEntity<String> getOtp(@Valid @RequestBody OTPRequest request) {
-      String otp = otpService.generateOtp(request);
-      return ResponseEntity.ok(otp);
+      otpService.generateOtp(request);
+      return ResponseEntity.ok("OTP has been sent to your email");
   }
 
-  @PostMapping("/verifyotp")
-  public ResponseEntity<Boolean> verifyOtp(@Valid @RequestBody OTPVerificationRequest request) {
-      boolean response = otpService.verifyOtp(request.getEmail(), request.getOtp());
-      return ResponseEntity.ok(response);
+  @PostMapping("/verify-otp")
+  public ResponseEntity<ApiResponse<Void>> verifyOtp(
+      @RequestParam String email,
+      @RequestParam String otp) {
+
+    otpService.verifyOtp(email, otp);
+
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder()
+            .success(true)
+            .message("OTP verified successfully")
+            .timestamp(Instant.now())
+            .build());
   }
+
 
   @PostMapping("/forgot-password")
   public ResponseEntity<String> forgotPassword(@Valid @RequestBody OTPRequest request) {
-    String otp = otpService.generateOtp(request);
+    otpService.generateOtp(request);
     return ResponseEntity.ok("OTP has been sent to your email");
   }
 
   @PostMapping("/reset-password")
-  public ResponseEntity<Boolean> resetPassword(@Valid @RequestBody PasswordResetRequest request) {
-    boolean result = authService.resetPassword(request.getEmail(), request.getOtp(), request.getNewPassword());
-    return ResponseEntity.ok(result);
+  public ResponseEntity<ApiResponse<Void>> resetPassword(
+      @RequestParam String email,
+      @RequestParam String otp,
+      @RequestParam String newPassword) {
+
+    authService.resetPassword(email, otp, newPassword);
+
+    return ResponseEntity.ok(
+        ApiResponse.<Void>builder()
+            .success(true)
+            .message("Password reset successfully")
+            .timestamp(Instant.now())
+            .build());
   }
+
 
 }
