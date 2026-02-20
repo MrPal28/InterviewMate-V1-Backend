@@ -1,6 +1,6 @@
 services:
   interview-question-service:
-    image: arindampal28/interviewmate-interview-question-service:0.0.1
+    image: arindampal28/interviewmate-interview-question-service:0.0.2
     container_name: interview-question-service
     env_file:
       - ./.env

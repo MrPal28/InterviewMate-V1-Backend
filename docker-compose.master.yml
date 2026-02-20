@@ -8,17 +8,18 @@ include:
 
   # -------- Entry Point --------
   - api-gateway\api-gateway\docker-compose.gateway.yml        # ONLY exposed service
+  - nginx\docker-compose.nginx.yml
 
   # -------- Business Services --------
   - user-service\user-service\docker-compose.user.yml
   # - resume-service\resume-service\docker-compose.resume.yml
-  # - coding-service\coding-service\docker-compose.coding.yml
+  - coding-service\coding-service\docker-compose.coding.yml
   - notification-service\notification-service\docker-compose.notification.yml
   # - interview-service\interview-service\docker-compose.interview.yml
 
   # -------- Judge / Execution Engine --------
-  # - judge0\docker-compose.judge0.yml
-  # - judge-worker\judge-worker\docker-compose.judge-worker.yml
+  - judge0\docker-compose.judge0.yml
+  - judge-worker\judge-worker\docker-compose.judge-worker.yml
 
   # -------- Interview Services --------
   # - interview-service-ai\AudioAnswerConverterService\docker-compose.audio-answer-converter.yml
