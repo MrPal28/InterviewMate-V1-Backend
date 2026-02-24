@@ -7,8 +7,8 @@ include:
   - config-server\docker-compose.config.yaml
 
   # -------- Entry Point --------
-  - api-gateway\api-gateway\docker-compose.gateway.yml        # ONLY exposed service
-  - nginx\docker-compose.nginx.yml
+  - api-gateway\api-gateway\docker-compose.gateway.yml        
+  - nginx\docker-compose.nginx.yml # ONLY exposed service
 
   # -------- Business Services --------
   - user-service\user-service\docker-compose.user.yml

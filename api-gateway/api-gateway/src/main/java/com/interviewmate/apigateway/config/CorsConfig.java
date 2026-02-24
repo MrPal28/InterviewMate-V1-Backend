@@ -5,18 +5,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
+    @Value("${frontend.allowed-origins}")
+    private List<String> allowedOrigins;
+
     @Bean
     CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
         // Only allow your trusted frontend
-        corsConfig.setAllowedOrigins(List.of("http://localhost:5173"));
+        corsConfig.setAllowedOrigins(allowedOrigins);
 
         // Specify allowed headers explicitly
         corsConfig.setAllowedHeaders(List.of(
