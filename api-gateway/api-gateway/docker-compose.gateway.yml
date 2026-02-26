@@ -1,15 +1,12 @@
 
 services:
   api-gateway:
-    image: arindampal28/interviewmate-api-gateway:latest
+    image: arindampal28/interviewmate-api-gateway:0.0.2
     container_name: backend-api-gateway
     
     restart: unless-stopped   
     env_file:
       - .env
-
-    ports:
-      - "8080"
 
     networks:
       - interviewmate-network

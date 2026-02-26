@@ -6,13 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.interviewmate.userservice.dto.ApiResponse;
 import com.interviewmate.userservice.dto.LoginRequestDTO;
 import com.interviewmate.userservice.dto.LoginResponse;
 import com.interviewmate.userservice.dto.OTPRequest;
+import com.interviewmate.userservice.dto.OTPVerificationRequest;
+import com.interviewmate.userservice.dto.PasswordResetRequest;
 import com.interviewmate.userservice.dto.RegisterRequestDTO;
 import com.interviewmate.userservice.dto.UserResponse;
 import com.interviewmate.userservice.service.AuthService;
@@ -48,12 +49,11 @@ public class AuthController {
       return ResponseEntity.ok("OTP has been sent to your email");
   }
 
-  @PostMapping("/verify-otp")
+  @PostMapping("/verifyotp")
   public ResponseEntity<ApiResponse<Void>> verifyOtp(
-      @RequestParam String email,
-      @RequestParam String otp) {
+      @RequestBody OTPVerificationRequest request) {
 
-    otpService.verifyOtp(email, otp);
+    otpService.verifyOtp(request.getEmail(), request.getOtp());
 
     return ResponseEntity.ok(
         ApiResponse.<Void>builder()
@@ -72,11 +72,9 @@ public class AuthController {
 
   @PostMapping("/reset-password")
   public ResponseEntity<ApiResponse<Void>> resetPassword(
-      @RequestParam String email,
-      @RequestParam String otp,
-      @RequestParam String newPassword) {
+      @RequestBody PasswordResetRequest request) {
 
-    authService.resetPassword(email, otp, newPassword);
+    authService.resetPassword(request.getEmail(), request.getOtp(), request.getNewPassword());
 
     return ResponseEntity.ok(
         ApiResponse.<Void>builder()
