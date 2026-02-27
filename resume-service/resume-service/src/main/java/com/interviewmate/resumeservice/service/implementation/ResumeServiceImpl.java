@@ -79,10 +79,11 @@ public class ResumeServiceImpl implements ResumeService {
                 .orElseThrow(() -> new IllegalArgumentException("Resume Not Found"));
 
         // Build request to Python service
-        PythonAnalysisRequestData requestData = new PythonAnalysisRequestData();
-        requestData.setResume(ResumeServiceImpl.toDTO(resumeData));
-        requestData.setJobDescription(jobDescription);
-
+        PythonAnalysisRequestData requestData = PythonAnalysisRequestData.builder().userid(resumeData.getUserId())
+        .resume(toDTO(resumeData))
+        .jobDescription(jobDescription)
+        .build();
+                                                            
         ObjectMapper mapper = new ObjectMapper();
         try {
             log.info("Request to Python service: {}", mapper.writeValueAsString(requestData));
@@ -102,8 +103,6 @@ public class ResumeServiceImpl implements ResumeService {
         if (entity == null) return null;
 
         return ResumeAnalysisDTO.builder()
-                .id(entity.getId())
-                .userId(entity.getUserId())
                 .personalInfo(ResumeMapper.toDTO(entity.getPersonalInfo()))
                 .summary(entity.getSummary())
                 // fully initialize collections to avoid lazy-loading issues

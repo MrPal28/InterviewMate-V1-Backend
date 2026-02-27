@@ -21,7 +21,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-ALLOWHOST = ["http://localhost:8000", "http://127.0.0.1:8000", "*" ]
+ALLOWHOST = ["http://localhost:8005", "http://127.0.0.1:8005", "*" ]
 
 app.add_middleware(
     CORSMiddleware,

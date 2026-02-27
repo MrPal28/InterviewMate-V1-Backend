@@ -1,7 +1,10 @@
 package com.interviewmate.resumeservice.dto;
 
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PythonAnalysisRequestData {
+  private UUID userid;
   private ResumeAnalysisDTO resume;
   private String jobDescription;
 }

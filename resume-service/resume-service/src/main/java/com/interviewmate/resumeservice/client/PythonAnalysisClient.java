@@ -11,9 +11,9 @@ import com.interviewmate.resumeservice.dto.PythonAnalysisRequestData;
 @FeignClient(name = "python-service", url = "${python.api.url}")
 public interface PythonAnalysisClient {
 
-    @PostMapping("/analyzewithdocument/")
+    @PostMapping("/analyzewithdocument")
     AnalysisResponse analyzeResume(@RequestBody PythonAnalysisRequest request);
 
-    @PostMapping("/analyzewithjson/")
+    @PostMapping("/analyzewithjson")
     AnalysisResponse analyzeStoredResume(@RequestBody PythonAnalysisRequestData requestData);
 }

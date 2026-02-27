@@ -19,7 +19,6 @@ import com.interviewmate.resumeservice.dto.ResumeRequest;
 import com.interviewmate.resumeservice.dto.ResumeResponseDTO;
 import com.interviewmate.resumeservice.service.ResumeBuilder;
 import com.interviewmate.resumeservice.service.ResumeService;
-import com.interviewmate.resumeservice.service.ResumeTemplateService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class ResumeController {
   private final ResumeService resumeService;
   private final ResumeBuilder resumeBuilder;
-  private final ResumeTemplateService resumeTemplateService;
 
   @PostMapping("/analyze-file")
   public ResponseEntity<AnalysisResponse> analyzeResume(
@@ -40,7 +38,6 @@ public class ResumeController {
 
     AnalysisResponse response = resumeService.analyzeResumeFile(
         userId, file, jobDescription);
-    System.out.println("userid"+userId);
     return ResponseEntity.ok(response);
   }
 
@@ -79,18 +76,5 @@ public ResponseEntity<AnalysisResponse> analyzeResumeById(
       ResumeResponseDTO response = resumeBuilder.getResume(userUuid);
       return ResponseEntity.ok(response);
   }
-
-  @PostMapping("/download")
-    public ResponseEntity<String> downloadResume(
-            @RequestBody String templateId,
-            @RequestHeader("x-user-id") String userId) {
-
-        String downloadUrl = resumeTemplateService.generateResumePdf(
-                UUID.fromString(userId),
-                templateId
-        );
-
-        return ResponseEntity.ok(downloadUrl);
-    }
 
 }
