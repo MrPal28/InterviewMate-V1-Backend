@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class StartInterviewRequest {
 
-    @NotBlank
     private String resumeUrl;
 
     private boolean specificQuestionRequirement;

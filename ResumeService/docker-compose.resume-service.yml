@@ -1,7 +1,7 @@
 services:
-  resume-service:
+  resume-service-ai:
     image: arindampal28/interviewmate-resume-service-ai:0.0.1
-    container_name: resume-service-ai
+    container_name: backend-resume-service-ai
 
     env_file:
       - .env
