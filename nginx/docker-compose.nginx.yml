@@ -12,7 +12,7 @@ services:
 
     depends_on:
       api-gateway:
-        condition: service_started
+        condition: service_healthy
 
     networks:
       - interviewmate-network
