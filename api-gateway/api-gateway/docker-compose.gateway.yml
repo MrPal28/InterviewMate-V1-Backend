@@ -1,7 +1,7 @@
 
 services:
   api-gateway:
-    image: arindampal28/interviewmate-api-gateway:0.0.2
+    image: arindampal28/interviewmate-api-gateway:0.0.4
     container_name: backend-api-gateway
     
     restart: unless-stopped   

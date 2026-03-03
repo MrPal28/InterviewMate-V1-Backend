@@ -1,7 +1,7 @@
 
 services:
   user-service:
-    image: arindampal28/interviewmate-user-service:0.0.3
+    image: arindampal28/interviewmate-user-service:0.0.5
     container_name: backend-user-service
     env_file: 
       - .env

@@ -87,7 +87,6 @@ public class GlobalExceptionHandler {
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
-
     // Catch ALL unknown exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGeneral(Exception ex) {
@@ -117,6 +116,7 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, status);
     }
+
 
 
 }

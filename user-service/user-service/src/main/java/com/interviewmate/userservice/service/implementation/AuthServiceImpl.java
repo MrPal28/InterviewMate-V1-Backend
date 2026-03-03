@@ -2,8 +2,9 @@ package com.interviewmate.userservice.service.implementation;
 
 import java.util.List;
 
-import org.springframework.security.authentication.AuthenticationManager;
+// import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ import com.interviewmate.userservice.dto.RegisterRequestDTO;
 import com.interviewmate.userservice.dto.UserResponse;
 import com.interviewmate.userservice.eventproducerandconsumer.NewUserRegistrationEventProducer;
 import com.interviewmate.userservice.exception.InvalidCredentialsException;
+import com.interviewmate.userservice.exception.OAuthUserNotRegisteredException;
 import com.interviewmate.userservice.exception.UserAlreadyExistsException;
 import com.interviewmate.userservice.exception.UserNotFoundException;
 import com.interviewmate.userservice.model.Company;
@@ -40,7 +42,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
     private final NewUserRegistrationEventProducer newUserEventProducer;
-    private final AuthenticationManager authenticationManager;
+    // private final AuthenticationManager authenticationManager;
+    private final AuthenticationConfiguration authenticationConfiguration;
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
     private final OTPService otpService;
@@ -62,14 +65,18 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public LoginResponse login(LoginRequestDTO request) {
     try {
-        authenticationManager.authenticate(
+        authenticationConfiguration.getAuthenticationManager()
+        .authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()));
 
     } catch (AuthenticationException ex) {
         throw new InvalidCredentialsException();
+    } catch (Exception ex) {
+        throw new RuntimeException("Authentication manager error", ex);
     }
+
 
     CustomUserDetails userDetails =
             (CustomUserDetails) userDetailsService.loadUserByUsername(request.getEmail());
@@ -95,6 +102,29 @@ public void resetPassword(String email, String otp, String newPassword) {
 
   user.setPassword(passwordEncoder.encode(newPassword));
   userRepo.save(user);
+}
+
+@Override
+public LoginResponse processOAuthLogin(String email, String name) {
+
+    User user = userRepo.findByEmail(email)
+            .orElseThrow(() ->
+                    new OAuthUserNotRegisteredException(
+                            "Please register first before using Google login"
+                    )
+            );
+
+    CustomUserDetails userDetails =
+            (CustomUserDetails) userDetailsService.loadUserByUsername(email);
+
+    final String jwtToken = jwtService.generateToken(userDetails);
+
+    return LoginResponse.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .role(user.getRole())
+            .token(jwtToken)
+            .build();
 }
 
   private User mapToUserEntity(RegisterRequestDTO request) {

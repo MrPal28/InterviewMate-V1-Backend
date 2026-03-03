@@ -21,7 +21,9 @@ public class RouteValidator {
             "/api/v1/auth/verifyotp",
             "/api/v1/auth/forgot-password",
             "/api/v1/auth/reset-password",
-            "/eureka"
+            "/eureka",
+            "/oauth2",
+            "/login/oauth2"
     );
 
     /**
