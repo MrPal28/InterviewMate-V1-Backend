@@ -1,208 +1,130 @@
 
-# InterviewMate - Backend
+# <p align="center">🚀 InterviewMate — The Future of Interview Prep</p>
 
-**InterviewMate** is a microservice-based backend system designed for a modern interview preparation platform.
-It provides authentication, notifications, practice management, mock interviews, resume tools, job boards, and API gateway functionalities, 
-all orchestrated via Docker for easy deployment. 
-The backend is built using **Spring Boot**, **Eureka**, and **Docker**, ensuring scalability and maintainability.
-
----
-
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Repository Structure](#repository-structure)
-- [Technologies Used](#technologies-used)
-- [Setup & Installation](#setup--installation)
-- [Running the Services](#running-the-services)
-- [Microservices Details](#microservices-details)
-- [Docker & Docker-Compose](#docker--docker-compose)
-- [Contributing](#contributing)
-- [License](#license)
+<p align="center">
+  <img src="https://img.shields.io/badge/Architecture-Microservices-blueviolet?style=for-the-badge&logo=micro-strategy" alt="Architecture" />
+  <img src="https://img.shields.io/badge/Backend-Spring%20Boot-6DB33F?style=for-the-badge&logo=spring-boot" alt="Backend" />
+  <img src="https://img.shields.io/badge/Container-Docker-2496ED?style=for-the-badge&logo=docker" alt="Docker" />
+  <img src="https://img.shields.io/badge/AI-Integrated-FF6F61?style=for-the-badge&logo=ai" alt="AI" />
+</p>
 
 ---
 
-## Project Overview
-The backend of InterviewMate provides core functionalities including:
+## 🌌 Overview
 
-- **User Service:** Handles user registration, login, profile management, and roles.
-- **Notification Service:** Sends email and system notifications to users.
-- **API Gateway:** Routes requests to respective microservices and provides centralized access.
-- **Eureka Server:** Service discovery for all microservices.
-- **Coding Service:** Manages user practice sessions, topics, and recommendations.
-- **Interview Service:** Simulates interviews with AI-driven questions and scoring.
-- **Resume  Service:** Helps users build professional resumes & Evaluates resumes and gives improvement suggestions.
-- **Judge Worker:** Middleware to evaluate the code
-The system uses **Docker** and **Docker Compose** to orchestrate all services, including dependencies like MySQL, MongoDB, Redis, and Kafka.
+**InterviewMate** is a cutting-edge, microservice-driven backend ecosystem engineered to revolutionize interview preparation. Leveraging **Spring Cloud**, **AI-assistants**, and **Scalable Containers**, it provides a seamless and high-performance environment for users to master their career goals.
 
 ---
 
-## Repository Structure
+## 🛠 Tech Stack — The Engine Room
+
+| Category | Technology |
+| :--- | :--- |
+| **Core Framework** | ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=spring-boot&logoColor=white) ![Java 21](https://img.shields.io/badge/Java%2021-ED8B00?style=flat-square&logo=openjdk&logoColor=white) |
+| **Microservices** | ![Eureka](https://img.shields.io/badge/Netflix%20Eureka-00A65A?style=flat-square&logo=netflix&logoColor=white) ![Spring Cloud Gateway](https://img.shields.io/badge/Cloud%20Gateway-6DB33F?style=flat-square&logo=spring-boot&logoColor=white) |
+| **Databases** | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white) |
+| **Real-time / Caching** | ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white) ![Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20?style=flat-square&logo=apache-kafka&logoColor=white) |
+| **Infrastructure** | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat-square&logo=nginx&logoColor=white) |
+| **Evaluation** | ![Judge0](https://img.shields.io/badge/Judge0-333333?style=flat-square&logo=code-climate&logoColor=white) |
+
+---
+
+## 🏗 System Architecture
+
+```mermaid
+graph TD
+    Client["🌐 Client Requests"] --> Gateway["🚪 API Gateway"]
+    Gateway --> Eureka["🔭 Service Discovery (Eureka)"]
+    
+    subgraph "Core Microservices"
+        Gateway --> UserService["👤 User Service"]
+        Gateway --> InterviewService["🎤 Interview Service (AI)"]
+        Gateway --> CodingService["💻 Coding Service"]
+        Gateway --> ResumeService["📄 Resume Service (AI)"]
+        Gateway --> NotificationService["🔔 Notification Service"]
+    end
+    
+    subgraph "Infrastructure & Persistence"
+        UserService --> MySQL[(MySQL)]
+        CodingService --> MongoDB[(MongoDB)]
+        CodingService --> JudgeWorker["⚙️ Judge Worker"]
+        JudgeWorker --> Judge0["🚀 Judge0 API"]
+        NotificationService --> Kafka["📩 Kafka"]
+        ResumeService --> Redis[(Redis)]
+    end
+
+    classDef default fill:#1a1a1a,stroke:#333,stroke-width:2px,color:#fff;
+    classDef highlight fill:#2d1b4e,stroke:#9b59b6,stroke-width:3px,color:#fff;
+    class Client,Gateway,Eureka highlight;
 ```
 
-InterviewMate-backend/
-│
-├─ .vscode/                     # VSCode workspace settings
-├─ api-gateway/                 # API Gateway microservice
-│  └─ api-gateway/
-├─ eureka-server/               # Eureka service discovery
-│  └─ eureka-server/
-├─ notification-service/        # Notification microservice
-│  └─ notification-service/
-├─ user-service/                # User microservice
-│  └─ user-service/
-├─ docker-compose.infra.yml
-├─ docker-compose.master.yml           # Docker Compose setup for all services
-├─ coding-service/coding-service            # Practice recommendation service
-├─ interview-service/interview-service      # Mock Interview microservice
-├─ resume-service/      # Resume Builder& Analyzer microservice
+---
 
-````
+## 🛰 Microservice Breakdown
+
+### 👤 User Service
+> *The Authentication Hub*
+- **Role:** Handles registration, JWT-based security, and profile management.
+- **Port:** `8081`
+
+### 🎤 Interview Service (AI-Powered)
+> *The AI Mock Interviewer*
+- **Role:** Conducts simulated AI-driven interviews with real-time scoring.
+- **Port:** `8084`
+
+### 💻 Coding Service
+> *The Practice Engine*
+- **Role:** Recommends topics and tracks coding sessions via Judge0 integration.
+- **Port:** `8083`
+
+### 📄 Resume Service
+> *The Career Architect*
+- **Role:** AI-powered resume analyzer and professional builder.
+- **Port:** `8086`
+
+### 🔔 Notification Service
+> *The Messenger*
+- **Role:** Centralized system for email and real-time alerts via Kafka.
+- **Port:** `8082`
 
 ---
 
-## Technologies Used
-- **Backend:** Java 21, Spring Boot  
-- **Service Discovery:** Eureka  
-- **Gateway:** Spring Cloud Gateway  
-- **Database:** MySQL (Dockerized)  , MongoDB
-- **Caching:** Redis (Dockerized)  
-- **Messaging:** Kafka (Dockerized)  
-- **Containerization:** Docker, Docker Compose  
+## ⚡ Quick Start — Launch the Future
 
----
+### 1. Requirements
+- **JDK 21**
+- **Docker Desktop**
+- **Maven**
 
-## Setup & Installation
-
-### Prerequisites
-- Java 21 JDK
-- Maven
-- Docker & Docker Compose
-- Git
-- MongoDB atlas Connection String
-
-### Steps
-1. **Clone the repository**
+### 2. Initiation
 ```bash
-mkdir InterviewMate
+# Clone the repository
 git clone https://github.com/MrPal28/InterviewMate-V1-backend
-cd InterviewMate
-git checkout backend
-````
-2. **Configure environment variables** 
+cd InterviewMate-V1-backend
 
----
-
-3. **Build & Run microservices**
-
-```bash
+# Launch the entire ecosystem
 docker compose -f docker-compose.master.yml up -d
 ```
 
-This command will start:
-
-* API Gateway
-* Eureka Server
-* User Service
-* Notification Service
-* Coding Service
-* Interview Service (Not done yet)
-* Resume Service
-* MySQL (if configured)
-* Redis (if configured)
-* Kafka
-* MongoDB
-
-Check logs with:
-
-```bash
-docker-compose logs -f
-```
-
-### Accessing Services (All are Private By Default except gateway & the ports are configurable )
-
-* **Eureka Dashboard:** `http://localhost:8761/`
-* **API Gateway:** `http://localhost:8080/`
-* **User Service API:** `http://localhost:8081/`
-* **Notification Service API:** `http://localhost:8082/`
-* **Coding Service API:** `http://localhost:8083/`
-* **Interview API:** `http://localhost:8084/`
-* **Resume API:** `http://localhost:8086/`
-
+### 3. Monitoring
+- **Control Center (Eureka):** [http://localhost:8761](http://localhost:8761)
+- **API Gateway (Edge):** [http://localhost:8080](http://localhost:8080)
 
 ---
 
-## Microservices Details
+## 🧩 How to Contribute
 
-### 1. User Service
+We are building the future together. 
 
-* Handles user registration, authentication, and role-based access.
-* Built with Spring Boot and MySQL.
-
-### 2. Notification Service
-
-* Handles email notifications and other user alerts.
-* Integrates with JavaMail or other notification protocols.
-
-### 3. API Gateway
-
-* Routes incoming requests to respective microservices.
-* Implements load balancing and centralized security.
-
-### 4. Eureka Server
-
-* Provides service discovery for all microservices.
-* Ensures dynamic scaling and service registration.
-
-### 5. Coding Service
-
-* Handles recommendation of practice topics and session tracking.
-* Uses AI/ML models for topic recommendations.
-
-### 6. Mock Interview Service
-
-* Conducts simulated interviews for users.
-* Provides AI-generated questions and scoring.
-
-### 7. Resume Service
-
-* Helps users create professional resumes.
-* Supports templates and formatting options.
-* Evaluates resumes and suggests improvements.
-* Provides scoring and skill-matching suggestions.
+1. **Fork** the repository
+2. **Branch**: `git checkout -b feature/awesome-new-feature`
+3. **Commit**: `git commit -m "Add something incredible"`
+4. **Push**: `git push origin feature/awesome-new-feature`
+5. **Request**: Open a Pull Request
 
 ---
 
-## Docker & Docker-Compose
-
-* Each microservice has its own `Dockerfile`.
-* The `docker-compose.master.yml` orchestrates all services.
-* Supports easy deployment in local or cloud environments.
-
-**Example Commands:**
-
-```bash
-docker-compose up --build       # Build and start all services
-docker-compose down             # Stop and remove all containers
-docker ps                       # Check running containers
-```
-
----
-
-## Contributing
-
-We welcome contributions!
-
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/YourFeature`
-3. Make your changes and commit: `git commit -m "Add your message"`
-4. Push to the branch: `git push origin feature/YourFeature`
-5. Open a Pull Request.
-
----
-
-
----
-
-**InterviewMate Backend** provides a scalable foundation for building a full-featured interview preparation platform using modern microservices architecture, with new services continuously being added for a complete learning ecosystem.
-
-```
+<p align="center">
+  <b>Built with ❤️ by InterviewMate Team.</b><br>
+  <i>Mastering the art of interviewing, one service at a time.</i>
+</p>
