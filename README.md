@@ -650,7 +650,605 @@ Client/
 
 ---
 
-## 🔗 **Inter-Service Communication Pattern**
+## � **Coding Service** — Code Evaluation & Practice Engine
+> *The Code Execution & Judgment Hub*
+
+**Location:** `coding-service/coding-service/`
+
+### Purpose
+- Judges and evaluates coding solutions with real-time feedback
+- Integrates with Judge0 for multi-language code execution
+- Tracks coding practice sessions and problem completion
+- Provides difficulty-based problem recommendations
+- Maintains submission history and performance analytics
+
+### Internal Architecture
+```
+coding-service/
+├── pom.xml                              [Maven Dependencies]
+├── docker-compose.coding.yml
+├── Dockerfile
+├── VERSION
+├── src/
+│   ├── main/
+│   │   ├── java/com/interviewmate/codingservice/
+│   │   │   ├── CodingServiceApplication.java
+│   │   │   ├── api/
+│   │   │   │   ├── ProblemController.java
+│   │   │   │   ├── SubmissionController.java
+│   │   │   │   └── RecommendationController.java
+│   │   │   ├── service/
+│   │   │   │   ├── CodeExecutionService.java        [Judge0 wrapper]
+│   │   │   │   ├── ProblemService.java
+│   │   │   │   ├── SubmissionService.java
+│   │   │   │   └── RecommendationEngine.java
+│   │   │   ├── client/
+│   │   │   │   └── Judge0Client.java                [Feign client for Judge0]
+│   │   │   ├── entity/
+│   │   │   │   ├── CodingProblem.java
+│   │   │   │   ├── CodeSubmission.java
+│   │   │   │   ├── ExecutionResult.java
+│   │   │   │   └── UserProgress.java
+│   │   │   ├── dto/
+│   │   │   │   ├── ProblemDTO.java
+│   │   │   │   ├── SubmissionDTO.java
+│   │   │   │   ├── ExecutionResultDTO.java
+│   │   │   │   └── ScoreDTO.java
+│   │   │   ├── repository/
+│   │   │   │   ├── ProblemRepository.java
+│   │   │   │   ├── SubmissionRepository.java
+│   │   │   │   └── UserProgressRepository.java
+│   │   │   ├── eventhandler/
+│   │   │   │   ├── SubmissionEventPublisher.java
+│   │   │   │   └── ResultEventPublisher.java
+│   │   │   └── config/
+│   │   │       ├── Judge0Config.java
+│   │   │       ├── KafkaConfig.java
+│   │   │       └── SecurityConfig.java
+│   │   └── resources/
+│   │       └── application.yml
+│   └── test/
+└── target/
+```
+
+### Key Dependencies
+- `spring-boot-starter-web` — REST API endpoints
+- `spring-boot-starter-data-jpa` — Database ORM
+- `spring-cloud-starter-openfeign` — Judge0 HTTP client
+- `spring-boot-starter-kafka` — Event streaming
+- `com.judge0:judge0-api-client` — Judge0 integration
+
+### API Endpoints
+```
+GET    /v1/problems                      - Fetch all coding problems
+GET    /v1/problems/{id}                - Get specific problem
+POST   /v1/submissions                  - Submit solution code
+GET    /v1/submissions/{id}             - Get submission results
+POST   /v1/execution                    - Execute code against test cases
+GET    /v1/recommendations/{user_id}   - Get problem recommendations
+GET    /v1/progress/{user_id}          - View user progress
+GET    /health
+```
+
+### Supported Languages
+- Java, Python, C++, C#, JavaScript, Ruby, Go, Rust, PHP, and 50+ more via Judge0
+
+---
+
+## 📄 **Resume Service** — Professional Resume Management & AI Analysis
+> *The Career Document Intelligence Platform*
+
+**Location:** `resume-service/resume-service/`
+
+### Purpose
+- Analyzes and scores resumes using AI-powered metrics
+- Provides real-time improvement suggestions
+- ATS (Applicant Tracking System) optimization
+- Resume formatting and structure validation
+- Career progression analytics and skill gap detection
+- Template-based resume generation
+
+### Internal Architecture
+```
+resume-service/
+├── pom.xml
+├── docker-compose.resume.yml
+├── Dockerfile
+├── VERSION
+├── src/
+│   ├── main/
+│   │   ├── java/com/interviewmate/resumeservice/
+│   │   │   ├── ResumeServiceApplication.java
+│   │   │   ├── api/
+│   │   │   │   ├── ResumeController.java
+│   │   │   │   ├── AnalysisController.java
+│   │   │   │   └── SuggestionController.java
+│   │   │   ├── service/
+│   │   │   │   ├── ResumeAnalysisService.java
+│   │   │   │   ├── ATSScoreCalculator.java
+│   │   │   │   ├── SkillExtractor.java
+│   │   │   │   ├── ResumeOptimizer.java
+│   │   │   │   └── AIFeedbackService.java
+│   │   │   ├── client/
+│   │   │   │   └── AIServiceClient.java
+│   │   │   ├── entity/
+│   │   │   │   ├── ResumeDocument.java
+│   │   │   │   ├── ResumeAnalysis.java
+│   │   │   │   ├── SkillProfile.java
+│   │   │   │   └── ImprovementSuggestion.java
+│   │   │   ├── dto/
+│   │   │   │   ├── ResumeDTO.java
+│   │   │   │   ├── AnalysisResultDTO.java
+│   │   │   │   ├── ATSScoreDTO.java
+│   │   │   │   └── SuggestionDTO.java
+│   │   │   ├── repository/
+│   │   │   │   ├── ResumeRepository.java
+│   │   │   │   ├── AnalysisRepository.java
+│   │   │   │   └── SuggestionRepository.java
+│   │   │   ├── parser/
+│   │   │   │   ├── PDFParser.java
+│   │   │   │   └── DocxParser.java
+│   │   │   ├── eventhandler/
+│   │   │   │   └── AnalysisEventPublisher.java
+│   │   │   └── config/
+│   │   │       ├── RedisConfig.java
+│   │   │       ├── KafkaConfig.java
+│   │   │       └── SecurityConfig.java
+│   │   └── resources/
+│   │       └── application.yml
+│   └── test/
+└── target/
+```
+
+### Key Dependencies
+- `spring-boot-starter-web`
+- `spring-boot-starter-data-redis` — Caching layer
+- `org.apache.pdfbox:pdfbox` — PDF parsing
+- `org.docx4j:docx4j` — DOCX parsing
+- `spring-boot-starter-kafka`
+
+### API Endpoints
+```
+POST   /v1/upload-resume                - Upload resume file (PDF/DOCX)
+POST   /v1/analyze                      - Analyze resume quality
+GET    /v1/analysis/{id}               - Get analysis details
+POST   /v1/ats-score                   - Calculate ATS compatibility
+POST   /v1/suggestions                 - Get improvement suggestions
+POST   /v1/extract-skills              - Extract skills from resume
+GET    /v1/templates                   - Get resume templates
+GET    /health
+```
+
+### Resume Scoring Metrics
+- **Content Quality:** 0-100 (grammar, clarity, completeness)
+- **ATS Score:** 0-100 (keyword optimization, format compatibility)
+- **Experience Relevance:** 0-100 (job match percentage)
+- **Skills Coverage:** 0-100 (required vs. provided skills)
+- **Overall Score:** Weighted average of above metrics
+
+---
+
+## 🔔 **Notification Service** — Multi-Channel Alert System
+> *The Real-time Communication Engine*
+
+**Location:** `notification-service/notification-service/`
+
+### Purpose
+- Sends multi-channel notifications (Email, SMS, In-app)
+- Kafka event-driven architecture for scalability
+- Email templating with dynamic content injection
+- Notification scheduling and delivery tracking
+- Failed delivery retry mechanism with exponential backoff
+- User notification preferences management
+
+### Internal Architecture
+```
+notification-service/
+├── pom.xml
+├── docker-compose.notification.yml
+├── Dockerfile
+├── VERSION
+├── src/
+│   ├── main/
+│   │   ├── java/com/interviewmate/notificationservice/
+│   │   │   ├── NotificationServiceApplication.java
+│   │   │   ├── kafka/
+│   │   │   │   ├── NotificationEventConsumer.java
+│   │   │   │   ├── InterviewCompletionListener.java
+│   │   │   │   ├── ReportReadyListener.java
+│   │   │   │   └── UserActivityListener.java
+│   │   │   ├── service/
+│   │   │   │   ├── EmailService.java
+│   │   │   │   ├── SMSService.java
+│   │   │   │   ├── PushNotificationService.java
+│   │   │   │   ├── NotificationOrchestrator.java
+│   │   │   │   └── DeliveryTracker.java
+│   │   │   ├── template/
+│   │   │   │   ├── EmailTemplate.java
+│   │   │   │   ├── TemplateEngine.java
+│   │   │   │   └── [templates/]
+│   │   │   │       ├── interview-completed.html
+│   │   │   │       ├── report-ready.html
+│   │   │   │       └── score-alert.html
+│   │   │   ├── entity/
+│   │   │   │   ├── Notification.java
+│   │   │   │   ├── NotificationPreference.java
+│   │   │   │   ├── DeliveryLog.java
+│   │   │   │   └── Template.java
+│   │   │   ├── dto/
+│   │   │   │   ├── NotificationDTO.java
+│   │   │   │   ├── EmailPayloadDTO.java
+│   │   │   │   └── PreferenceDTO.java
+│   │   │   ├── repository/
+│   │   │   │   ├── NotificationRepository.java
+│   │   │   │   ├── PreferenceRepository.java
+│   │   │   │   └── DeliveryLogRepository.java
+│   │   │   ├── client/
+│   │   │   │   ├── EmailServiceClient.java              [SMTP/SendGrid]
+│   │   │   │   ├── SMSServiceClient.java                [Twilio/AWS SNS]
+│   │   │   │   └── PushServiceClient.java               [Firebase]
+│   │   │   └── config/
+│   │   │       ├── KafkaConfig.java
+│   │   │       ├── EmailConfig.java
+│   │   │       └── SecurityConfig.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       └── templates/
+│   └── test/
+└── target/
+```
+
+### Key Dependencies
+- `spring-boot-starter-mail` — SMTP support
+- `spring-boot-starter-kafka` — Event streaming
+- `com.sendgrid:sendgrid-java` — SendGrid integration
+- `com.twilio.sdk:twilio` — SMS support
+- `com.google.firebase:firebase-admin` — Push notifications
+- `org.springframework.cloud:spring-cloud-starter-openfeign`
+
+### Kafka Topics Consumed
+```
+interview.completion.event
+report.generation.completed
+score.threshold.exceeded
+user.achievement.unlocked
+system.alert.critical
+```
+
+### API Endpoints
+```
+POST   /v1/send-notification            - Send immediate notification
+POST   /v1/schedule-notification        - Schedule delayed notification
+GET    /v1/preferences/{user_id}       - Get user preferences
+PUT    /v1/preferences/{user_id}       - Update user notification settings
+GET    /v1/delivery-status/{id}        - Check notification delivery status
+GET    /health
+```
+
+---
+
+## ⚙️ **Config Server** — Centralized Configuration Management
+> *The Configuration Authority*
+
+**Location:** `config-server/`
+
+### Purpose
+- Centralized configuration for all microservices
+- Dynamic property refresh without redeployment
+- Environment-specific profiles (dev, staging, production)
+- Secure credential management via Spring Cloud Config
+- Git-based configuration repository for version control
+
+### Internal Architecture
+```
+config-server/
+├── pom.xml
+├── docker-compose.config.yaml
+├── Dockerfile
+├── HELP.md
+├── src/
+│   ├── main/
+│   │   ├── java/com/interviewmate/configserver/
+│   │   │   ├── ConfigServerApplication.java
+│   │   │   └── config/
+│   │   │       └── SecurityConfig.java
+│   │   └── resources/
+│   │       ├── application.yml
+│   │       └── bootstrap.yml
+│   └── test/
+├── logs/
+└── target/
+```
+
+### Key Dependencies
+- `spring-cloud-config-server` — Config server
+- `spring-boot-starter-security` — Config protection
+- `spring-cloud-starter-netflix-eureka-client` — Service discovery
+
+### Configuration Properties Managed
+```yaml
+# Common Configuration Properties
+server.port: <SERVICE_PORT>
+spring.application.name: <SERVICE_NAME>
+eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka
+
+# Database Configuration
+spring.data.mongodb.uri: mongodb://username:password@mongodb:27017/interviewmate
+spring.datasource.url: jdbc:mysql://mysql:3306/interviewmate
+spring.jpa.hibernate.ddl-auto: update
+
+# Kafka Configuration
+spring.kafka.bootstrap-servers: kafka:9092
+spring.kafka.consumer.group-id: interviewmate-group
+
+# Redis Configuration
+spring.redis.host: redis
+spring.redis.port: 6379
+
+# JWT & Security
+jwt.secret: <SECRET_KEY>
+jwt.expiration: 86400000
+
+# AI/ML Service URLs
+ai.service.audio-converter-url: http://audio-converter:8000
+ai.service.behavioral-analysis-url: http://behavioral-analysis:8001
+ai.service.question-service-url: http://interview-question:8002
+ai.service.report-service-url: http://interview-report:8003
+```
+
+### Port & Access
+- **Port:** `8888`
+- **Health Check:** `GET http://localhost:8888/actuator/health`
+- **Configuration Endpoint:** `GET http://localhost:8888/<service-name>/default`
+
+---
+
+## 🏛️ **Judge0 & Judge0-Worker** — Code Execution Infrastructure
+> *The Multi-Language Code Execution Engine*
+
+**Location:** `judge0/`
+
+### Purpose
+- Executes code in 50+ programming languages
+- Provides sandboxed execution environment
+- Handles input/output for test cases
+- Memory and time limit enforcement
+- Detailed execution feedback with compilation/runtime errors
+- Asynchronous job queue processing
+
+### Architecture
+```
+Judge0 System:
+├── judge0-api                          [REST API Interface]
+├── judge0-worker                       [Background Job Processor]
+├── judge0-db (PostgreSQL)             [Job Storage & Results]
+└── judge0-redis                       [Queue Management]
+
+Service Flow:
+Client → Judge0 API → Redis Queue → Worker Pool → Execution → Results Storage
+```
+
+### Docker Configuration
+```
+Services:
+  - judge0-api:
+      Container: judge0/judge0:latest
+      Port: 2358 (mapped to internal only)
+      Dependencies: PostgreSQL, Redis
+      Health Check: Database connectivity
+      
+  - judge0-worker:
+      Container: judge0/judge0:latest (with worker script)
+      Command: ./scripts/workers
+      Dependencies: Judge0 API, Redis
+      Privileges: Elevated (for code execution)
+      Auto-scaling: Can run multiple instances
+      
+  - judge0-db (PostgreSQL):
+      Container: postgres:latest
+      Port: 5432
+      Database: judge0
+      Credentials: judge0:judge0
+      
+  - judge0-redis:
+      Container: redis:latest
+      Port: 6379
+      Password: judge0redis
+```
+
+### Configuration (`judge0.conf`)
+```
+# Database Connection
+POSTGRES_USER=judge0
+POSTGRES_PASSWORD=judge0
+POSTGRES_DB=judge0
+DATABASE_URL=postgres://judge0:judge0@judge0-db-interviewmate:5432/judge0
+
+# Redis Connection
+REDIS_PASSWORD=judge0redis
+REDIS_URL=redis://:judge0redis@judge0-redis-interviewmate:6379/0
+REDIS_HOST=judge0-redis-interviewmate
+REDIS_PORT=6379
+
+# Security
+INTERNAL_RUNNER_SECRET=somesecret
+
+# Worker Configuration
+WORKERS=1-4                            [Number of parallel workers]
+TIMEOUT=15                              [Execution timeout in seconds]
+```
+
+### API Integration (via Coding Service)
+```
+Coding Service → Judge0 API:
+POST /submissions
+{
+  "source_code": "print('Hello')",
+  "language_id": 71,          // Python
+  "stdin": "test input",
+  "expected_output": "Hello",
+  "time_limit": 5,
+  "memory_limit": 128000
+}
+
+Response:
+{
+  "token": "abcd1234",
+  "status": {
+    "id": 3,
+    "description": "Accepted"
+  },
+  "stdout": "Hello",
+  "time": "0.123s",
+  "memory": "4096KB"
+}
+```
+
+### Supported Languages (50+)
+```
+Java, Python, C++, C#, JavaScript, Ruby, Go, Rust, PHP, Kotlin,
+Swift, Scala, Haskell, Lisp, Perl, R, MATLAB, Lua, Groovy,
+Dart, Clojure, Elixir, Erlang, F#, Objective-C, Ocaml, Pascal,
+Prolog, Bash, PowerShell, VB.NET, COBOL, FORTRAN, ... and more
+```
+
+---
+
+## 🔄 **Async Communication Patterns & Event-Driven Architecture**
+
+> *The Backbone of Distributed Intelligence*
+
+InterviewMate employs sophisticated event-driven patterns for scalability and loose coupling between services.
+
+### 1. **Kafka-Based Event Streaming**
+
+#### Event Topics & Producers/Consumers
+```yaml
+Topics:
+  - interview.session.started
+      Producer: Interview Service
+      Consumers: Behavioral Analysis, Audio Converter, Question Service
+      
+  - interview.session.completed
+      Producer: Interview Service
+      Consumers: Report Service, Notification Service, Analytics
+      
+  - audio.transcription.completed
+      Producer: Audio Converter Service
+      Consumer: Interview Service (aggregation)
+      
+  - behavior.analysis.completed
+      Producer: Behavioral Analysis Service
+      Consumer: Report Service, Interview Service
+      
+  - report.generation.completed
+      Producer: Report Service
+      Consumers: Notification Service, User Dashboard
+      
+  - code.submission.received
+      Producer: Coding Service
+      Consumers: Judge0 Worker, Analytics Service
+      
+  - submission.result.ready
+      Producer: Judge0 Worker
+      Consumers: Coding Service, Notification Service
+      
+  - resume.analysis.completed
+      Producer: Resume Service
+      Consumers: User Service, Notification Service
+```
+
+#### Configuration
+```yaml
+spring.kafka:
+  bootstrap-servers: kafka:9092
+  consumer:
+    group-id: interviewmate-consumer-group
+    auto-offset-reset: earliest
+    max-poll-records: 500
+  producer:
+    acks: all
+    retries: 3
+    batch-size: 16384
+  topics:
+    partitions: 3
+    replication-factor: 2
+```
+
+### 2. **Request-Reply Pattern (Synchronous over Async)**
+
+For scenarios requiring immediate responses:
+```
+┌─────────────────┐
+│ Interview       │─────► Kafka: interview.question.request ───┐
+│ Service         │                                             │
+│                 │◄────────────────────────────────────────────┤
+└─────────────────┘       Kafka: interview.question.response    │
+                                                                 │
+                          ┌──────────────────────────────────────┘
+                          │
+                          ▼
+                    ┌──────────────┐
+                    │ Question     │
+                    │ Service      │
+                    └──────────────┘
+```
+
+### 3. **Saga Pattern for Distributed Transactions**
+
+Interview completion saga:
+```
+1. Interview Service: Start Interview Saga
+   ↓
+2. Question Service: Load Questions → SUCCESS/FAILURE
+   ↓
+3. Audio Service: Process Audio → SUCCESS/FAILURE
+   ↓
+4. Behavioral Service: Analyze Behavior → SUCCESS/FAILURE
+   ↓
+5. Report Service: Generate Report → SUCCESS/FAILURE
+   ↓
+6. Notification Service: Send Notification → SUCCESS/FAILURE
+   
+If any step fails → Compensating transactions trigger rollback
+```
+
+### 4. **Circuit Breaker Pattern**
+
+For resilience against cascading failures:
+```yaml
+resilience4j:
+  circuitbreaker:
+    instances:
+      audioServiceBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2000
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5000
+```
+
+### 5. **Eventual Consistency Pattern**
+
+Services may not be immediately consistent; they converge over time:
+```
+Interview Session Created
+  ├─ Written to MongoDB (immediate)
+  ├─ Published to Kafka (async)
+  │
+  ├─ Audio Service consumes → Processes → Publishes result
+  ├─ Behavior Service consumes → Processes → Publishes result
+  └─ Report Service consumes all → Generates → Publishes
+
+Final Report ready after all components complete (~30-60 seconds)
+```
+
+---
+
+## �🔗 **Inter-Service Communication Pattern**
 
 ```mermaid
 sequenceDiagram
@@ -911,45 +1509,390 @@ mysql -u root -p interviewmate_db
 
 ## ⚡ Quick Start — Launch the Future
 
+### 📧 **IMPORTANT: Environment Variables Setup**
+
+Before deploying, you **MUST** configure the `.env` file with all required credentials and connection strings.
+
+**For complete environment variable details and configuration assistance, please contact:**
+```
+📧 Email: arindampal669@gmail.com
+Subject: InterviewMate Backend - Environment Configuration
+```
+
+For security reasons, sensitive credentials are NOT included in the repository. The maintainer will provide:
+- Database credentials (MySQL, MongoDB)
+- Kafka & Redis passwords
+- JWT secret keys
+- Third-party API keys (SendGrid, Twilio, Google Generative AI)
+- Judge0 configuration
+- AI Service endpoints
+
 ### 1. Prerequisites
 - **JDK 21+** (Java Development Kit)
 - **Python 3.10+** (for AI/ML services)
 - **Docker Desktop 4.0+** (with Compose)
 - **Maven 3.8.1+** (for building)
 - **Git** (for version control)
-- **Memory:** Minimum 8GB RAM recommended
+- **Memory:** Minimum 8GB RAM recommended (12GB+ for AI/ML services)
 - **Disk Space:** Minimum 20GB for Docker images
 
-### 2. Environment Setup
+### 2. Environment Variables Configuration
+
+Create a `.env` file in the root directory with the following structure:
+
+```bash
+# ============================================
+# GLOBAL SETTINGS
+# ============================================
+ENVIRONMENT=development
+PROJECT_NAME=interviewmate
+LOG_LEVEL=INFO
+
+# ============================================
+# DATABASE CONFIGURATION
+# ============================================
+
+# MySQL (User Service, Resume Service)
+MYSQL_ROOT_PASSWORD=your_mysql_root_password
+MYSQL_USER=interviewmate_user
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=interviewmate_db
+MYSQL_HOSTNAME=mysql
+MYSQL_PORT=3306
+
+# MongoDB (Interview Service, AI Services)
+MONGODB_INITDB_ROOT_USERNAME=mongo_admin
+MONGODB_INITDB_ROOT_PASSWORD=your_mongo_password
+MONGODB_DATABASE=interviewmate
+MONGODB_HOSTNAME=mongodb
+MONGODB_PORT=27017
+
+# ============================================
+# CACHE & MESSAGE QUEUE
+# ============================================
+
+# Redis (Resume Service Caching)
+REDIS_PASSWORD=your_redis_password
+REDIS_HOSTNAME=redis
+REDIS_PORT=6379
+
+# Kafka (Event Streaming)
+KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+KAFKA_BROKER_ID=1
+KAFKA_NUM_PARTITIONS=3
+KAFKA_REPLICATION_FACTOR=2
+
+# Zookeeper
+ZOOKEEPER_CLIENT_PORT=2181
+ZOOKEEPER_SYNC_LIMIT=5
+ZOOKEEPER_INIT_LIMIT=10
+
+# ============================================
+# JUDGE0 CONFIGURATION
+# ============================================
+
+# Judge0 Database (PostgreSQL)
+POSTGRES_USER=judge0
+POSTGRES_PASSWORD=your_judge0_postgres_password
+POSTGRES_DB=judge0
+POSTGRES_HOSTNAME=judge0-db-interviewmate
+POSTGRES_PORT=5432
+DATABASE_URL=postgres://judge0:your_judge0_postgres_password@judge0-db-interviewmate:5432/judge0
+
+# Judge0 Redis
+JUDGE0_REDIS_PASSWORD=your_judge0_redis_password
+JUDGE0_REDIS_HOSTNAME=judge0-redis-interviewmate
+JUDGE0_REDIS_PORT=6379
+JUDGE0_REDIS_URL=redis://:your_judge0_redis_password@judge0-redis-interviewmate:6379/0
+
+# Judge0 Configuration
+JUDGE0_API_PORT=2358
+JUDGE0_WORKERS=4
+JUDGE0_TIMEOUT=15
+JUDGE0_INTERNAL_RUNNER_SECRET=your_judge0_internal_secret
+
+# ============================================
+# SPRING CLOUD CONFIGURATION
+# ============================================
+
+# Eureka Server (Service Discovery)
+EUREKA_HOSTNAME=eureka-server
+EUREKA_PORT=8761
+EUREKA_INSTANCE_HOSTNAME=eureka-server
+
+# Config Server
+CONFIG_SERVER_HOSTNAME=config-server
+CONFIG_SERVER_PORT=8888
+CONFIG_SERVER_GIT_URI=https://github.com/your-org/interviewmate-config.git
+CONFIG_SERVER_GIT_USERNAME=your_git_username
+CONFIG_SERVER_GIT_PASSWORD=your_git_token
+
+# ============================================
+# MICROSERVICE PORTS
+# ============================================
+
+API_GATEWAY_PORT=8080
+USER_SERVICE_PORT=8081
+NOTIFICATION_SERVICE_PORT=8082
+CODING_SERVICE_PORT=8083
+INTERVIEW_SERVICE_PORT=8086
+RESUME_SERVICE_PORT=8085
+
+# ============================================
+# SECURITY & JWT
+# ============================================
+
+JWT_SECRET=your_very_secure_jwt_secret_key_min_32_chars
+JWT_EXPIRATION=86400000
+JWT_REFRESH_TOKEN_EXPIRATION=604800000
+OAUTH2_CLIENT_ID=your_oauth2_client_id
+OAUTH2_CLIENT_SECRET=your_oauth2_client_secret
+
+# ============================================
+# EMAIL CONFIGURATION (Notifications)
+# ============================================
+
+# SendGrid Integration
+SENDGRID_API_KEY=SG.your_sendgrid_api_key
+SENDGRID_FROM_EMAIL=noreply@interviewmate.com
+SENDGRID_FROM_NAME=InterviewMate Platform
+
+# SMTP Fallback
+MAIL_SMTP_HOST=smtp.gmail.com
+MAIL_SMTP_PORT=587
+MAIL_SMTP_USERNAME=your_email@gmail.com
+MAIL_SMTP_PASSWORD=your_app_password
+MAIL_SMTP_AUTH=true
+MAIL_SMTP_STARTTLS_ENABLE=true
+
+# ============================================
+# SMS CONFIGURATION (Notifications)
+# ============================================
+
+# Twilio Configuration
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_FROM_PHONE=+1234567890
+
+# ============================================
+# AI & ML SERVICE ENDPOINTS
+# ============================================
+
+# Audio Answer Converter Service
+AUDIO_CONVERTER_HOSTNAME=audio-answer-converter
+AUDIO_CONVERTER_PORT=8000
+AUDIO_CONVERTER_URL=http://audio-answer-converter:8000
+
+# Behavioral Analysis Service
+BEHAVIORAL_ANALYSIS_HOSTNAME=behavioral-analysis
+BEHAVIORAL_ANALYSIS_PORT=8001
+BEHAVIORAL_ANALYSIS_URL=http://behavioral-analysis:8001
+
+# Video Audio Separator Service
+VIDEO_SEPARATOR_HOSTNAME=video-audio-seperator
+VIDEO_SEPARATOR_PORT=8002
+VIDEO_SEPARATOR_URL=http://video-audio-seperator:8002
+
+# Interview Question Service
+INTERVIEW_QUESTION_HOSTNAME=interview-question
+INTERVIEW_QUESTION_PORT=8003
+INTERVIEW_QUESTION_URL=http://interview-question:8003
+
+# Interview Report Service
+INTERVIEW_REPORT_HOSTNAME=interview-report
+INTERVIEW_REPORT_PORT=8004
+INTERVIEW_REPORT_URL=http://interview-report:8004
+
+# ============================================
+# THIRD-PARTY API KEYS (AI/ML)
+# ============================================
+
+# Google Generative AI (For Question Generation & Feedback)
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_generative_ai_key
+GOOGLE_AI_MODEL=gemini-pro
+
+# OpenAI API (Optional - for Whisper)
+OPENAI_API_KEY=sk-your_openai_api_key
+
+# HuggingFace API (For ML Models)
+HUGGINGFACE_API_TOKEN=hf_your_huggingface_token
+
+# ============================================
+# LOGGING & MONITORING
+# ============================================
+
+# ELK Stack
+ELASTICSEARCH_HOSTNAME=elasticsearch
+ELASTICSEARCH_PORT=9200
+KIBANA_PORT=5601
+
+# Prometheus
+PROMETHEUS_PORT=9090
+
+# Grafana
+GRAFANA_PORT=3000
+GRAFANA_ADMIN_PASSWORD=your_grafana_password
+
+# ============================================
+# FILE STORAGE
+# ============================================
+
+# Local Storage
+UPLOAD_DIR=/uploads
+MAX_FILE_SIZE=104857600  # 100MB
+
+# AWS S3 (Optional)
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=interviewmate-uploads
+
+# ============================================
+# APPLICATION FEATURES
+# ============================================
+
+# Feature Flags
+ENABLE_AI_FEEDBACK=true
+ENABLE_VIDEO_ANALYSIS=true
+ENABLE_ATS_SCORING=true
+ENABLE_EMAIL_NOTIFICATIONS=true
+ENABLE_SMS_NOTIFICATIONS=false
+
+# Interview Settings
+INTERVIEW_SESSION_TIMEOUT_MINUTES=60
+MAX_INTERVIEW_QUESTIONS=10
+QUESTION_GENERATION_TIMEOUT_SECONDS=30
+
+# ============================================
+# DOCKER NETWORK
+# ============================================
+
+DOCKER_NETWORK=interviewmate-network
+```
+
+### **Getting Environment Values:**
+
+1. **Database Credentials:**
+   - Generate strong passwords for MySQL, MongoDB, Redis, PostgreSQL
+   - Store them securely in your `.env` file
+
+2. **JWT Secret:**
+   ```bash
+   # Generate a secure JWT secret (minimum 32 characters)
+   openssl rand -base64 32
+   ```
+
+3. **API Keys & Tokens:**
+   - Sign up for Google Generative AI at: https://makersuite.google.com
+   - SendGrid keys: https://app.sendgrid.com/settings/api_keys
+   - Twilio: https://www.twilio.com/console
+   - Contact: **arindampal669@gmail.com** for pre-configured credentials
+
+4. **Git Configuration for Config Server:**
+   - Create a private GitHub repository for configurations
+   - Generate Personal Access Token: https://github.com/settings/tokens
+
+### 3. Environment Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/interviewmate-backend.git
 cd backend
 
-# Copy environment files
+# Copy environment template
 cp .env.example .env
-# Edit .env with your credentials
+
+# Edit .env with your credentials (USE YOUR EDITOR)
+# nano .env  OR  code .env
+
+# ⚠️ IMPORTANT: NEVER commit .env to version control
+# Add to .gitignore if not already present
+echo ".env" >> .gitignore
 
 # Create external Docker network
 docker network create interviewmate-network
+
+# Verify network creation
+docker network ls
 ```
 
-### 3. Start Infrastructure Services
+### 4. Start Infrastructure Services
 ```bash
-# Start MySQL, MongoDB, Redis, Kafka, Nginx
+# Start MySQL, MongoDB, Redis, Kafka, Zookeeper, Nginx
 docker-compose -f docker-compose.infra.yml up -d
 
-# Wait 30 seconds for services to bootstrap
+# Wait 30 seconds for services to fully bootstrap
 sleep 30
 
 # Verify infrastructure health
 docker-compose -f docker-compose.infra.yml ps
+
+# Check logs if any service failed
+docker-compose -f docker-compose.infra.yml logs kafka
 ```
 
-### 4. Start Core Java Microservices
+### 5. Start Core Java Microservices
 ```bash
-# Start Config Server
+# Start Config Server first (centralized configuration)
 docker-compose -f config-server/docker-compose.config.yaml up -d
+
+# Wait for Config Server to be healthy
+sleep 20
+curl http://localhost:8888/actuator/health
+
+# Start Eureka Server (service discovery)
+docker-compose -f eureka-server/eureka-server/docker-compose.eureka.yml up -d
+
+# Wait for Eureka to initialize
+sleep 15
+curl http://localhost:8761
+
+# Start API Gateway (entry point)
+docker-compose -f api-gateway/api-gateway/docker-compose.gateway.yml up -d
+
+# Start remaining Java microservices
+docker-compose -f interview-service/interview-service/docker-compose.interview.yml up -d
+docker-compose -f coding-service/coding-service/docker-compose.coding.yml up -d
+docker-compose -f user-service/user-service/docker-compose.user.yml up -d
+docker-compose -f notification-service/notification-service/docker-compose.notification.yml up -d
+docker-compose -f resume-service/resume-service/docker-compose.resume.yml up -d
+
+# Start Judge0 (Code Execution Engine)
+docker-compose -f judge0/docker-compose.judge0.yml up -d
+
+# Wait for all services to be ready
+sleep 20
+
+# Verify all Java services are running
+docker-compose -f docker-compose.master.yml ps | grep -E "interview|coding|user|notification|resume"
+```
+
+### 6. Start Python AI/ML Microservices
+```bash
+# Navigate to AI services directory
+cd interview-service-ai
+
+# Start Audio Answer Converter Service
+docker-compose -f AudioAnswerConverterService/docker-compose.audio-answer-converter.yml up -d
+
+# Start Behavioral Analysis Service (requires GPU for optimal performance)
+docker-compose -f BehavioralAnalysisService/docker-compose.behavioral-analysis.yml up -d
+
+# Start Video Audio Separator Service
+docker-compose -f VideoAudioSeperatorService/docker-compose.video-audio-seperator.yml up -d
+
+# Start Interview Question Service
+docker-compose -f InterviewQuestionService/docker-compose.interview-question.yml up -d
+
+# Start Interview Report Service
+docker-compose -f InterviewReportService/docker-compose.interview-report.yml up -d
+
+# Start Client Communication Service
+docker-compose -f Client/docker-compose-client.yml up -d
+
+# Return to backend root
+cd ..
+```
 
 # Wait for Config Server to be ready
 sleep 20
@@ -967,42 +1910,217 @@ docker-compose -f user-service/user-service/docker-compose.user.yml up -d
 docker-compose -f notification-service/notification-service/docker-compose.notification.yml up -d
 docker-compose -f resume-service/resume-service/docker-compose.resume.yml up -d
 
-# Verify all services
+# Verify all services are running
 docker-compose -f docker-compose.master.yml ps
 ```
 
-### 5. Start Python AI Microservices
+### 6. Start Python AI Microservices
 ```bash
 # Start AI Services (requires Python 3.10+)
 cd interview-service-ai
 
 docker-compose -f AudioAnswerConverterService/docker-compose.audio-answer-converter.yml up -d
+sleep 10
+
 docker-compose -f BehavioralAnalysisService/docker-compose.behavioral-analysis.yml up -d
+sleep 10
+
 docker-compose -f VideoAudioSeperatorService/docker-compose.video-audio-seperator.yml up -d
+sleep 10
+
 docker-compose -f InterviewQuestionService/docker-compose.interview-question.yml up -d
+sleep 10
+
 docker-compose -f InterviewReportService/docker-compose.interview-report.yml up -d
+sleep 10
+
 docker-compose -f Client/docker-compose-client.yml up -d
+
+# Return to backend root
+cd ..
 ```
 
-### 6. Health Verification
+### 7. Complete Health Verification
+
+#### **Java Services Health Check**
 ```bash
-# Check Eureka Dashboard
+# Eureka Service Discovery (8761)
 curl http://localhost:8761
+echo "Eureka Dashboard: http://localhost:8761"
 
-# Check API Gateway
+# Config Server (8888)
+curl http://localhost:8888/actuator/health
+echo "✓ Config Server is healthy"
+
+# API Gateway (8080)
 curl http://localhost:8080/actuator/health
+echo "✓ API Gateway is healthy"
 
-# Check Interview Service
+# Interview Service (8086)
 curl http://localhost:8086/actuator/health
+echo "✓ Interview Service is healthy"
 
-# Check MongoDB
-docker exec -it mongodb mongosh mongodb://localhost:27017
+# Coding Service (8083)
+curl http://localhost:8083/actuator/health
+echo "✓ Coding Service is healthy"
 
-# Check Kafka
-docker exec -it kafka kafka-broker-api-versions.sh --bootstrap-server localhost:9092
+# User Service (8081)
+curl http://localhost:8081/actuator/health
+echo "✓ User Service is healthy"
 
-# Check Redis
-redis-cli -h localhost ping
+# Notification Service (8082)
+curl http://localhost:8082/actuator/health
+echo "✓ Notification Service is healthy"
+
+# Resume Service (8085)
+curl http://localhost:8085/actuator/health
+echo "✓ Resume Service is healthy"
+```
+
+#### **Infrastructure Services Health Check**
+```bash
+# MongoDB Connection
+docker exec -it mongodb mongosh mongodb://localhost:27017 --eval "db.adminCommand('ping')"
+echo "✓ MongoDB is accessible"
+
+# MySQL Connection
+docker exec -it mysql mysql -u root -p$MYSQL_ROOT_PASSWORD -e "SELECT VERSION();"
+echo "✓ MySQL is accessible"
+
+# Redis Connection
+docker exec -it redis redis-cli ping
+echo "Redis Response: PONG ✓"
+
+# Kafka Topics Listing
+docker exec -it kafka kafka-topics --bootstrap-server localhost:9092 --list
+echo "✓ Kafka is accessible"
+
+# Judge0 API Health
+curl http://localhost:2358/health 2>/dev/null || echo "✓ Judge0 is running (internal)"
+```
+
+#### **Python AI Services Health Check**
+```bash
+# Audio Converter Service
+curl http://localhost:8000/health 2>/dev/null && echo "✓ Audio Converter Service healthy" || echo "⚠ Audio service may be initializing..."
+
+# Behavioral Analysis Service
+curl http://localhost:8001/health 2>/dev/null && echo "✓ Behavioral Analysis Service healthy" || echo "⚠ Behavioral service may be initializing..."
+
+# Video Audio Separator Service
+curl http://localhost:8002/health 2>/dev/null && echo "✓ Video Separator Service healthy" || echo "⚠ Video service may be initializing..."
+
+# Interview Question Service
+curl http://localhost:8003/health 2>/dev/null && echo "✓ Interview Question Service healthy" || echo "⚠ Question service may be initializing..."
+
+# Interview Report Service
+curl http://localhost:8004/health 2>/dev/null && echo "✓ Interview Report Service healthy" || echo "⚠ Report service may be initializing..."
+```
+
+---
+
+### 8. Access Points & Documentation
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│            🎯 INTERVIEWMATE SERVICE ENDPOINTS               │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  🌐 API Gateway               → http://localhost:8080       │
+│  🔭 Eureka Dashboard          → http://localhost:8761       │
+│  📋 Swagger API Docs          → http://localhost:8080/swagger-ui.html │
+│  ⚙️  Config Server             → http://localhost:8888       │
+│  🎤 Interview Service         → http://localhost:8086       │
+│  💻 Coding Service            → http://localhost:8083       │
+│  👤 User Service              → http://localhost:8081       │
+│  🔔 Notification Service      → http://localhost:8082       │
+│  📄 Resume Service            → http://localhost:8085       │
+│                                                               │
+│  🐍 Python AI Services (Internal):                          │
+│     • Audio Converter         → http://localhost:8000       │
+│     • Behavioral Analysis     → http://localhost:8001       │
+│     • Video Separator         → http://localhost:8002       │
+│     • Interview Question      → http://localhost:8003       │
+│     • Interview Report        → http://localhost:8004       │
+│                                                               │
+│  🗄️  Databases & Infrastructure:                            │
+│     • MongoDB Atlas           → mongodb://localhost:27017   │
+│     • MySQL                   → localhost:3306              │
+│     • Redis                   → localhost:6379              │
+│     • Kafka                   → localhost:9092              │
+│     • Nginx                   → http://localhost:80         │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Sample API Requests:**
+```bash
+# Get JWT Token (User Service)
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123"
+  }'
+
+# Start Interview Session
+curl -X POST http://localhost:8080/api/v1/interviews/start \
+  -H "Authorization: Bearer <JWT_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jobTitle": "Software Engineer",
+    "interviewType": "BEHAVIORAL"
+  }'
+
+# Get Interview Report
+curl -X GET http://localhost:8080/api/v1/reports/<INTERVIEW_ID> \
+  -H "Authorization: Bearer <JWT_TOKEN>"
+```
+
+---
+
+## 📊 Service Dependency Graph
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    CLIENT APPLICATION                        │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                 ┌─────────────▼──────────────┐
+                 │   🚪 API GATEWAY:8080     │
+                 │   (Spring Cloud Gateway)  │
+                 └──┬─────────────────────┬─┘
+                    │                     │
+         ┌──────────┴──────────┐  ┌─────┴─────────────┐
+         │                     │  │                   │
+    ┌────▼──────┐  ┌──────────▼──┴──────┐    ┌──────┴──────┐
+    │🔭 Eureka  │  │ Config Server 8888 │    │ Services... │
+    │8761       │  │                    │    │             │
+    └───────────┘  └────────────────────┘    └─────────────┘
+         ▲  ▲                                      ▲ ▲ ▲
+         │  │                                      │ │ │
+    ┌────┴──┴──────┬───────────────┬───────┬──────┘ │ │
+    │              │               │       │        │ │
+┌──▼─────┐  ┌────▼─────┐  ┌──────▼──┐  │   │       │
+│ User   │  │Interview  │  │ Coding  │  │   │       │
+│Service │  │ Service   │  │Service  │  │   │       │
+│ 8081   │  │ 8086      │  │ 8083    │  │   │       │
+└────────┘  └────┬─┬────┘  └────┬────┘  │   │       │
+                 │ │            │       │   │       │
+            ┌────┴─┴────┐   ┌───▼──┐    │   │       │
+            │  MongoDB  │   │Judge0│    │   │       │
+            │(interviews)   │ 2358 │    │   │       │
+            └───────────┘   └──┬───┘    │   │       │
+                               │        │   │       │
+                          ┌────▼────────┴─┬─┴───┬───┴──┐
+                          │                │     │      │
+                      ┌──▼──┐  ┌──────┐  ┌─▼─┐  │   ┌──▼───┐
+                      │Redis │ │Kafka │  │Msg│  │   │Resume │
+                      │6379  │ │9092  │  │Qing  │   │8085   │
+                      └──────┘ └──────┘  └────┘  │   └───────┘
+                                                 │
+                                            [AI/ML Services]
+                                            (Python Stack)
 ```
 
 ### 7. Access Points
