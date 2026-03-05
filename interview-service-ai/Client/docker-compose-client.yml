@@ -1,6 +1,6 @@
 services:
   client:
-    image: arindampal28/interviewmate-client:0.0.1
+    image: srijanray/client:1.0.0
     container_name: client
 
     networks:

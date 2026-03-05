@@ -1,6 +1,6 @@
 services:
   video-audio-seperator-service:
-    image: arindampal28/interviewmate-video-audio-seperator-service:0.0.1
+    image: arindampal28/interviewmate-video-audio-seperator-service:0.0.2
     container_name: video-audio-seperator-service
     env_file: 
       - ./.env

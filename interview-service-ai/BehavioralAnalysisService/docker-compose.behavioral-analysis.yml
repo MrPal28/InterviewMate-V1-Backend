@@ -1,6 +1,6 @@
 services:
   behavioral-analysis-service:
-    image: arindampal28/interviewmate-behavioral-analysis-service:0.0.1
+    image: arindampal28/interviewmate-behavioral-analysis-service:0.0.2
     container_name: behavioral-analysis-service
     env_file: 
       - ./.env
