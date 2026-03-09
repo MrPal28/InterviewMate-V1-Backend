@@ -1,6 +1,6 @@
 services:
   audio-answer-converter-service:
-    image: arindampal28/interviewmate-audio-answer-converter-service:0.0.2
+    image: arindampal28/interviewmate-audio-answer-converter-service:0.0.3
     container_name: audio-answer-converter-service
     env_file: 
       - ./.env
