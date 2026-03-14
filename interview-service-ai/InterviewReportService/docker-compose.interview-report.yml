@@ -1,6 +1,6 @@
 services:
   interview-report-service:
-    image:  srijanray/interview-report-service:1.0.0
+    image:  arindampal10/interviewmate-interview-report-service:0.0.1
     container_name: interview-report-service
     env_file: 
       - ./.env
