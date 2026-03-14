@@ -13,9 +13,9 @@ include:
   # -------- Business Services --------
   - user-service\user-service\docker-compose.user.yml
   # - resume-service\resume-service\docker-compose.resume.yml
-  # - ResumeService\docker-compose.resume-service.yml
+  # - resume-service-ai\docker-compose.resume-service.yml
   # - coding-service\coding-service\docker-compose.coding.yml
-  # - notification-service\notification-service\docker-compose.notification.yml
+  - notification-service\notification-service\docker-compose.notification.yml
   - interview-service\interview-service\docker-compose.interview.yml
 
   # -------- Judge / Execution Engine --------

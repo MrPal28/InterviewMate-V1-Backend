@@ -1,7 +1,7 @@
 
 services:
   interview-service:
-    image: arindampal28/interviewmate-interview-service:latest
+    image: arindampal28/interviewmate-interview-service:0.0.2
     container_name: backend-interview-service
     env_file:
       - .env
